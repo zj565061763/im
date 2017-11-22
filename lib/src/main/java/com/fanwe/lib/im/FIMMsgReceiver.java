@@ -8,7 +8,10 @@ public abstract class FIMMsgReceiver<T> implements FIMMsg
     public final void parseMsg(T msg)
     {
         onParseMsg(msg);
+    }
 
+    protected final void notifyReceiveMsg()
+    {
         FIMMsgImpl msgImpl = new FIMMsgImpl();
         msgImpl.setDataType(getDataType());
         msgImpl.setData(getData());
