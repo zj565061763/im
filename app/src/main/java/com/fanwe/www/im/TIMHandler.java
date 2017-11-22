@@ -47,7 +47,7 @@ public class TIMHandler implements FIMHandler
                 @Override
                 public void onError(int code, String msg)
                 {
-                    FIMResultCallback callback = FIMManager.getInstance().getResultCallback(callbackId);
+                    FIMResultCallback callback = FIMManager.getInstance().getCallback(callbackId);
                     if (callback != null)
                     {
                         callback.onError(code, msg);
@@ -57,7 +57,7 @@ public class TIMHandler implements FIMHandler
                 @Override
                 public void onSuccess(TIMMessage timMessage)
                 {
-                    FIMResultCallback callback = FIMManager.getInstance().getResultCallback(callbackId);
+                    FIMResultCallback callback = FIMManager.getInstance().getCallback(callbackId);
                     if (callback != null)
                     {
 

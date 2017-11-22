@@ -106,7 +106,7 @@ public class FIMManager
         return getIMHandler().sendMsg(id, data, FIMConversationType.Group, generateCallbackId(callback));
     }
 
-    public synchronized FIMResultCallback getResultCallback(String callbackId)
+    public synchronized FIMResultCallback getCallback(String callbackId)
     {
         if (TextUtils.isEmpty(callbackId))
         {
