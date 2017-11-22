@@ -1,8 +1,12 @@
 package com.fanwe.lib.im;
 
+import android.text.TextUtils;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 /**
  * Created by zhengjun on 2017/11/22.
@@ -11,6 +15,9 @@ public class FIMManager
 {
     private static FIMManager sInstance;
     private FIMHandler mIMHandler;
+
+    private Map<FIMResultCallback, String> mMapCallback = new WeakHashMap<>();
+    private long mCallbackId = 0;
 
     private List<FIMMsgCallback> mListMsgCallback = new ArrayList<>();
 
@@ -82,9 +89,9 @@ public class FIMManager
      * @param data 要发送的数据
      * @return
      */
-    public boolean sendMsgC2C(String id, FIMData data)
+    public boolean sendMsgC2C(String id, FIMData data, FIMResultCallback<FIMMsg> callback)
     {
-        return getIMHandler().sendMsg(id, data, FIMConversationType.C2C);
+        return getIMHandler().sendMsg(id, data, FIMConversationType.C2C, generateCallbackId(callback));
     }
 
     /**
@@ -94,9 +101,42 @@ public class FIMManager
      * @param data 要发送的数据
      * @return
      */
-    public boolean sendMsgGroup(String id, FIMData data)
+    public boolean sendMsgGroup(String id, FIMData data, FIMResultCallback<FIMMsg> callback)
     {
-        return getIMHandler().sendMsg(id, data, FIMConversationType.Group);
+        return getIMHandler().sendMsg(id, data, FIMConversationType.Group, generateCallbackId(callback));
     }
 
+    public synchronized FIMResultCallback getResultCallback(String callbackId)
+    {
+        if (TextUtils.isEmpty(callbackId))
+        {
+            return null;
+        }
+        Iterator<Map.Entry<FIMResultCallback, String>> it = mMapCallback.entrySet().iterator();
+        while (it.hasNext())
+        {
+            Map.Entry<FIMResultCallback, String> item = it.next();
+            if (callbackId.equals(item.getValue()))
+            {
+                return item.getKey();
+            }
+        }
+        return null;
+    }
+
+    private synchronized String generateCallbackId(FIMResultCallback callback)
+    {
+        if (callback == null)
+        {
+            return null;
+        }
+        if (mCallbackId >= Long.MAX_VALUE)
+        {
+            mCallbackId = 0;
+        }
+        mCallbackId++;
+        String result = String.valueOf(mCallbackId);
+        mMapCallback.put(callback, result);
+        return result;
+    }
 }

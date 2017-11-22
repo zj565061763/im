@@ -8,11 +8,11 @@ public interface FIMHandler
     FIMHandler DEFAULT = new FIMHandler()
     {
         @Override
-        public boolean sendMsg(String id, FIMData data, FIMConversationType type)
+        public boolean sendMsg(String id, FIMData data, FIMConversationType type, String callbackId)
         {
             return false;
         }
     };
 
-    boolean sendMsg(String id, FIMData data, FIMConversationType type);
+    boolean sendMsg(String id, FIMData data, FIMConversationType type, String callbackId);
 }
