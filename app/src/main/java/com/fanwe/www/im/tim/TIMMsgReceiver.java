@@ -42,7 +42,7 @@ public class TIMMsgReceiver extends FIMMsgReceiver<TIMMessage>
     }
 
     @Override
-    public String getConversationtPeer()
+    public String getConversationPeer()
     {
         String peer = null;
         if (timGroupSystemElem != null)
