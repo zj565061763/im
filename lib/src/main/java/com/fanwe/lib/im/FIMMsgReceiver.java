@@ -119,6 +119,11 @@ public abstract class FIMMsgReceiver<T> implements FIMMsg
      */
     public abstract boolean isNeedDownloadData();
 
+    /**
+     * 开始下载数据
+     *
+     * @param callback
+     */
     public abstract void startDonloadData(FIMResultCallback callback);
 
     /**
