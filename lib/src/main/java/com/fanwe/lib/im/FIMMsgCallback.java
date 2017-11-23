@@ -5,5 +5,7 @@ package com.fanwe.lib.im;
  */
 public interface FIMMsgCallback
 {
+    String filterMsgByPeer();
+
     void onReceiveMsg(FIMMsg msg);
 }

@@ -112,13 +112,30 @@ public class FIMManager
     FIMMsgCallback mInternalMsgCallback = new FIMMsgCallback()
     {
         @Override
+        public String filterMsgByPeer()
+        {
+            return null;
+        }
+
+        @Override
         public void onReceiveMsg(FIMMsg msg)
         {
             Iterator<FIMMsgCallback> it = mListMsgCallback.iterator();
             while (it.hasNext())
             {
                 FIMMsgCallback item = it.next();
-                item.onReceiveMsg(msg);
+
+                final String filterPeer = item.filterMsgByPeer();
+                if (TextUtils.isEmpty(filterPeer))
+                {
+                    item.onReceiveMsg(msg);
+                } else
+                {
+                    if (filterPeer.equals(msg.getConversation().getPeer()))
+                    {
+                        item.onReceiveMsg(msg);
+                    }
+                }
             }
         }
     };
