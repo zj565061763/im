@@ -20,4 +20,11 @@ public interface FIMMsgData<T>
      * @throws Exception
      */
     T parseToSDKMsg() throws Exception;
+
+    /**
+     * 将数据解析为FIM消息
+     *
+     * @return
+     */
+    FIMMsg parseToMsg();
 }
