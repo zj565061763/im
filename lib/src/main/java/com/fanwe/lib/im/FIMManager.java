@@ -128,11 +128,10 @@ public class FIMManager
      *
      * @param peer 对方id
      * @param data 要发送的数据
-     * @return
      */
-    public boolean sendMsgC2C(String peer, FIMData data, FIMResultCallback<FIMMsg> callback)
+    public void sendMsgC2C(String peer, FIMData data, FIMResultCallback<FIMMsg> callback)
     {
-        return getIMHandler().sendMsg(peer, data, FIMConversationType.C2C, generateCallbackId(callback));
+        getIMHandler().sendMsg(peer, data, FIMConversationType.C2C, generateCallbackId(callback));
     }
 
     /**
@@ -140,11 +139,10 @@ public class FIMManager
      *
      * @param peer group id
      * @param data 要发送的数据
-     * @return
      */
-    public boolean sendMsgGroup(String peer, FIMData data, FIMResultCallback<FIMMsg> callback)
+    public void sendMsgGroup(String peer, FIMData data, FIMResultCallback<FIMMsg> callback)
     {
-        return getIMHandler().sendMsg(peer, data, FIMConversationType.Group, generateCallbackId(callback));
+        getIMHandler().sendMsg(peer, data, FIMConversationType.Group, generateCallbackId(callback));
     }
 
     public synchronized FIMResultCallback getCallback(String callbackId)

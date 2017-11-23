@@ -17,7 +17,7 @@ import com.tencent.TIMValueCallBack;
 public class TIMHandler implements FIMHandler<TIMMessage>
 {
     @Override
-    public boolean sendMsg(String peer, FIMData<TIMMessage> data, FIMConversationType type, final String callbackId)
+    public void sendMsg(String peer, FIMData<TIMMessage> data, FIMConversationType type, final String callbackId)
     {
         TIMConversation conversation = null;
         switch (type)
@@ -63,6 +63,5 @@ public class TIMHandler implements FIMHandler<TIMMessage>
         {
             e.printStackTrace();
         }
-        return false;
     }
 }
