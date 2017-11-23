@@ -116,6 +116,12 @@ public class AppIMMsgReceiver extends FIMMsgReceiver<TIMMessage>
     }
 
     @Override
+    public boolean remove()
+    {
+        return getSDKMsg().remove();
+    }
+
+    @Override
     protected FIMMsgData<TIMMessage> onParseSDKMsg() throws Exception
     {
         FIMMsgData result = null;

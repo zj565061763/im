@@ -16,4 +16,6 @@ public interface FIMMsg
     FIMMsgState getState();
 
     FIMConversation getConversation();
+
+    boolean remove();
 }
