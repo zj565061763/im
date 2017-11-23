@@ -1,5 +1,7 @@
 package com.fanwe.lib.im;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 
 import org.json.JSONObject;
@@ -93,8 +95,31 @@ public abstract class FIMMsgReceiver<T> implements FIMMsg
      */
     public final void notifyReceiveMsg()
     {
-        FIMManager.getInstance().mInternalMsgCallback.onReceiveMsg(this);
+        final FIMMsg msg = this;
+        if (Looper.myLooper() == Looper.getMainLooper())
+        {
+            FIMManager.getInstance().mInternalMsgCallback.onReceiveMsg(msg);
+        } else
+        {
+            new Handler(Looper.getMainLooper()).post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    notifyReceiveMsg();
+                }
+            });
+        }
     }
+
+    /**
+     * 是否有需要下载的数据
+     *
+     * @return
+     */
+    public abstract boolean isNeedDownloadData();
+
+    public abstract void startDonloadData(FIMResultCallback callback);
 
     /**
      * 将第三方的SDK消息解析为数据

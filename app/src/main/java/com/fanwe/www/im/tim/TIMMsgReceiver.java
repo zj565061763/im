@@ -3,12 +3,16 @@ package com.fanwe.www.im.tim;
 import com.fanwe.lib.im.FIMData;
 import com.fanwe.lib.im.FIMManager;
 import com.fanwe.lib.im.FIMMsgReceiver;
+import com.fanwe.lib.im.FIMResultCallback;
 import com.google.gson.Gson;
 import com.tencent.TIMCustomElem;
 import com.tencent.TIMElem;
 import com.tencent.TIMElemType;
 import com.tencent.TIMGroupSystemElem;
+import com.tencent.TIMImageElem;
 import com.tencent.TIMMessage;
+import com.tencent.TIMSoundElem;
+import com.tencent.TIMTextElem;
 
 /**
  * Created by Administrator on 2017/11/23.
@@ -20,6 +24,9 @@ public class TIMMsgReceiver extends FIMMsgReceiver<TIMMessage>
 
     private TIMCustomElem timCustomElem;
     private TIMGroupSystemElem timGroupSystemElem;
+    private TIMImageElem timImageElem;
+    private TIMSoundElem timSoundElem;
+    private TIMTextElem timTextElem;
 
     public TIMMsgReceiver(TIMMessage sdkMsg)
     {
@@ -75,6 +82,15 @@ public class TIMMsgReceiver extends FIMMsgReceiver<TIMMessage>
                 case GroupSystem:
                     timGroupSystemElem = (TIMGroupSystemElem) elem;
                     break;
+                case Image:
+                    this.timImageElem = (TIMImageElem) elem;
+                    break;
+                case Sound:
+                    this.timSoundElem = (TIMSoundElem) elem;
+                    break;
+                case Text:
+                    this.timTextElem = (TIMTextElem) elem;
+                    break;
                 default:
                     break;
             }
@@ -99,8 +115,18 @@ public class TIMMsgReceiver extends FIMMsgReceiver<TIMMessage>
                 result = (FIMData) new Gson().fromJson(json, clazz);
             }
         }
-
         return result;
     }
 
+    @Override
+    public boolean isNeedDownloadData()
+    {
+        return false;
+    }
+
+    @Override
+    public void startDonloadData(FIMResultCallback callback)
+    {
+
+    }
 }
