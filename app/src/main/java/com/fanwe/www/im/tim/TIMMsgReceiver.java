@@ -119,6 +119,12 @@ public class TIMMsgReceiver extends FIMMsgReceiver<TIMMessage>
     }
 
     @Override
+    protected void onFillData(FIMData<TIMMessage> data) throws Exception
+    {
+
+    }
+
+    @Override
     public boolean isNeedDownloadData()
     {
         return false;

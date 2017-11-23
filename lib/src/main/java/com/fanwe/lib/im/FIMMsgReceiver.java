@@ -84,6 +84,10 @@ public abstract class FIMMsgReceiver<T> implements FIMMsg
         try
         {
             mData = onParseSDKMsg();
+            if (mData != null)
+            {
+                onFillData(mData);
+            }
         } catch (Exception e)
         {
             onError(e);
@@ -133,6 +137,8 @@ public abstract class FIMMsgReceiver<T> implements FIMMsg
      * @throws Exception
      */
     protected abstract FIMData<T> onParseSDKMsg() throws Exception;
+
+    protected abstract void onFillData(FIMData<T> data) throws Exception;
 
     protected void onError(Exception e)
     {
