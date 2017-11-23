@@ -8,7 +8,7 @@ public interface FIMHandler<T>
     FIMHandler DEFAULT = new FIMHandler()
     {
         @Override
-        public void sendMsg(String peer, FIMData data, FIMConversationType type, String callbackId)
+        public void sendMsg(String peer, FIMMsgData data, FIMConversationType type, String callbackId)
         {
         }
     };
@@ -21,5 +21,5 @@ public interface FIMHandler<T>
      * @param type       会话类型
      * @param callbackId 回调id
      */
-    void sendMsg(String peer, FIMData<T> data, FIMConversationType type, String callbackId);
+    void sendMsg(String peer, FIMMsgData<T> data, FIMConversationType type, String callbackId);
 }

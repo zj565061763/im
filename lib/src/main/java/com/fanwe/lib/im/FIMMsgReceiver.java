@@ -15,7 +15,7 @@ public abstract class FIMMsgReceiver<T> implements FIMMsg
     public static final int EMPTY_DATA_TYPE = -1;
 
     private T mSDKMsg;
-    private FIMData mData;
+    private FIMMsgData mData;
 
     public FIMMsgReceiver(T sdkMsg)
     {
@@ -38,7 +38,7 @@ public abstract class FIMMsgReceiver<T> implements FIMMsg
     }
 
     @Override
-    public FIMData getData()
+    public FIMMsgData getData()
     {
         return mData;
     }
@@ -81,7 +81,7 @@ public abstract class FIMMsgReceiver<T> implements FIMMsg
      *
      * @return
      */
-    public final FIMData<T> parse()
+    public final FIMMsgData<T> parse()
     {
         try
         {
@@ -135,9 +135,9 @@ public abstract class FIMMsgReceiver<T> implements FIMMsg
      * @return
      * @throws Exception
      */
-    protected abstract FIMData<T> onParseSDKMsg() throws Exception;
+    protected abstract FIMMsgData<T> onParseSDKMsg() throws Exception;
 
-    protected abstract void onFillData(FIMData<T> data) throws Exception;
+    protected abstract void onFillData(FIMMsgData<T> data) throws Exception;
 
     protected void onError(Exception e)
     {

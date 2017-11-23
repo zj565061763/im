@@ -1,6 +1,6 @@
 package com.fanwe.www.im.tim.data;
 
-import com.fanwe.lib.im.FIMData;
+import com.fanwe.lib.im.FIMMsgData;
 import com.google.gson.Gson;
 import com.tencent.TIMCustomElem;
 import com.tencent.TIMMessage;
@@ -8,7 +8,7 @@ import com.tencent.TIMMessage;
 /**
  * Created by Administrator on 2017/11/23.
  */
-public abstract class CustomData implements FIMData<TIMMessage>
+public abstract class CustomData implements FIMMsgData<TIMMessage>
 {
     public static final int TEXT_IM = 1;
 

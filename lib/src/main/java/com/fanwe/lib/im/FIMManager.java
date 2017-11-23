@@ -88,7 +88,7 @@ public class FIMManager
      * @param clazz    对应的Class
      * @param <T>
      */
-    public <T extends FIMData> void addDataClass(int dataType, Class<T> clazz)
+    public <T extends FIMMsgData> void addDataClass(int dataType, Class<T> clazz)
     {
         if (clazz == null)
         {
@@ -104,7 +104,7 @@ public class FIMManager
      * @param <T>
      * @return
      */
-    public <T extends FIMData> Class<T> getDataClass(int dataType)
+    public <T extends FIMMsgData> Class<T> getDataClass(int dataType)
     {
         return mMapDataClass.get(dataType);
     }
@@ -129,7 +129,7 @@ public class FIMManager
      * @param peer 对方id
      * @param data 要发送的数据
      */
-    public void sendMsgC2C(String peer, FIMData data, FIMResultCallback<FIMMsg> callback)
+    public void sendMsgC2C(String peer, FIMMsgData data, FIMResultCallback<FIMMsg> callback)
     {
         getIMHandler().sendMsg(peer, data, FIMConversationType.C2C, generateCallbackId(callback));
     }
@@ -140,7 +140,7 @@ public class FIMManager
      * @param peer group id
      * @param data 要发送的数据
      */
-    public void sendMsgGroup(String peer, FIMData data, FIMResultCallback<FIMMsg> callback)
+    public void sendMsgGroup(String peer, FIMMsgData data, FIMResultCallback<FIMMsg> callback)
     {
         getIMHandler().sendMsg(peer, data, FIMConversationType.Group, generateCallbackId(callback));
     }

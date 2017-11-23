@@ -4,7 +4,7 @@ package com.fanwe.lib.im;
  * Created by zhengjun on 2017/11/22.
  */
 
-public interface FIMData<T>
+public interface FIMMsgData<T>
 {
     /**
      * 返回数据类型

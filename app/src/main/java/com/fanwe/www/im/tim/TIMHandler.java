@@ -1,7 +1,7 @@
 package com.fanwe.www.im.tim;
 
 import com.fanwe.lib.im.FIMConversationType;
-import com.fanwe.lib.im.FIMData;
+import com.fanwe.lib.im.FIMMsgData;
 import com.fanwe.lib.im.FIMHandler;
 import com.fanwe.lib.im.FIMManager;
 import com.fanwe.lib.im.FIMResultCallback;
@@ -17,7 +17,7 @@ import com.tencent.TIMValueCallBack;
 public class TIMHandler implements FIMHandler<TIMMessage>
 {
     @Override
-    public void sendMsg(String peer, FIMData<TIMMessage> data, FIMConversationType type, final String callbackId)
+    public void sendMsg(String peer, FIMMsgData<TIMMessage> data, FIMConversationType type, final String callbackId)
     {
         TIMConversation conversation = null;
         switch (type)

@@ -1,7 +1,7 @@
 package com.fanwe.www.im.tim;
 
 import com.fanwe.lib.im.FIMConversationType;
-import com.fanwe.lib.im.FIMData;
+import com.fanwe.lib.im.FIMMsgData;
 import com.fanwe.lib.im.FIMManager;
 import com.fanwe.lib.im.FIMMsgReceiver;
 import com.fanwe.lib.im.FIMMsgState;
@@ -96,9 +96,9 @@ public class TIMMsgReceiver extends FIMMsgReceiver<TIMMessage>
     }
 
     @Override
-    protected FIMData<TIMMessage> onParseSDKMsg() throws Exception
+    protected FIMMsgData<TIMMessage> onParseSDKMsg() throws Exception
     {
-        FIMData result = null;
+        FIMMsgData result = null;
 
         long count = getSDKMsg().getElementCount();
         TIMElem elem = null;
@@ -148,14 +148,14 @@ public class TIMMsgReceiver extends FIMMsgReceiver<TIMMessage>
             Class clazz = FIMManager.getInstance().getDataClass(dataType);
             if (clazz != null)
             {
-                result = (FIMData) new Gson().fromJson(json, clazz);
+                result = (FIMMsgData) new Gson().fromJson(json, clazz);
             }
         }
         return result;
     }
 
     @Override
-    protected void onFillData(FIMData<TIMMessage> data) throws Exception
+    protected void onFillData(FIMMsgData<TIMMessage> data) throws Exception
     {
 
     }

@@ -7,7 +7,7 @@ public interface FIMMsg
 {
     int getDataType();
 
-    FIMData getData();
+    FIMMsgData getData();
 
     boolean isSelf();
 
