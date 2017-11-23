@@ -36,7 +36,7 @@ public class TIMMsgReceiver extends FIMMsgReceiver<TIMMessage>
     }
 
     @Override
-    protected FIMManager getIMManager()
+    protected FIMManager<TIMMessage> getIMManager()
     {
         return AppIMManager.getInstance();
     }

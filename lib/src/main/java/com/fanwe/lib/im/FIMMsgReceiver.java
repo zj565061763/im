@@ -7,22 +7,24 @@ import android.text.TextUtils;
 import org.json.JSONObject;
 
 /**
- * Created by zhengjun on 2017/11/22.
+ * 第三方IM消息接收处理类
+ *
+ * @param <M>
  */
-public abstract class FIMMsgReceiver<T> implements FIMMsg
+public abstract class FIMMsgReceiver<M> implements FIMMsg
 {
     public static final String FIELD_NAME_GUESS_DATA_TYPE = "type";
     public static final int EMPTY_DATA_TYPE = -1;
 
-    private T mSDKMsg;
+    private M mSDKMsg;
     private FIMMsgData mData;
 
-    public FIMMsgReceiver(T sdkMsg)
+    public FIMMsgReceiver(M sdkMsg)
     {
         mSDKMsg = sdkMsg;
     }
 
-    public final T getSDKMsg()
+    public final M getSDKMsg()
     {
         return mSDKMsg;
     }
@@ -81,7 +83,7 @@ public abstract class FIMMsgReceiver<T> implements FIMMsg
      *
      * @return
      */
-    public final FIMMsgData<T> parse()
+    public final FIMMsgData<M> parse()
     {
         try
         {
@@ -120,7 +122,12 @@ public abstract class FIMMsgReceiver<T> implements FIMMsg
         }
     }
 
-    protected abstract FIMManager getIMManager();
+    /**
+     * 返回IM管理对象
+     *
+     * @return
+     */
+    protected abstract FIMManager<M> getIMManager();
 
     /**
      * 是否有需要下载的数据，true-需要<br>
@@ -137,9 +144,9 @@ public abstract class FIMMsgReceiver<T> implements FIMMsg
      * @return
      * @throws Exception
      */
-    protected abstract FIMMsgData<T> onParseSDKMsg() throws Exception;
+    protected abstract FIMMsgData<M> onParseSDKMsg() throws Exception;
 
-    protected abstract void onFillData(FIMMsgData<T> data) throws Exception;
+    protected abstract void onFillData(FIMMsgData<M> data) throws Exception;
 
     protected void onError(Exception e)
     {
