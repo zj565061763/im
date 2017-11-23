@@ -34,7 +34,6 @@ public class TIMHandler implements FIMHandler<TIMMessage>
 
         try
         {
-
             TIMMessage message = data.parseToSDKMsg();
             conversation.sendMessage(message, new TIMValueCallBack<TIMMessage>()
             {
@@ -54,7 +53,9 @@ public class TIMHandler implements FIMHandler<TIMMessage>
                     FIMResultCallback callback = FIMManager.getInstance().getCallback(callbackId);
                     if (callback != null)
                     {
-
+                        TIMMsgReceiver receiver = new TIMMsgReceiver(timMessage);
+                        receiver.parse();
+                        callback.onSuccess(receiver);
                     }
                 }
             });

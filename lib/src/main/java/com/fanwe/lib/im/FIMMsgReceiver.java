@@ -62,7 +62,7 @@ public abstract class FIMMsgReceiver<T> implements FIMMsg
     /**
      * 通知FIM接收新消息
      */
-    protected final void notifyReceiveMsg()
+    public final void notifyReceiveMsg()
     {
         FIMManager.getInstance().mInternalMsgCallback.onReceiveMsg(this);
     }
