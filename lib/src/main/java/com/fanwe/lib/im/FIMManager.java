@@ -159,6 +159,7 @@ public class FIMManager
             Map.Entry<FIMResultCallback, String> item = it.next();
             if (callbackId.equals(item.getValue()))
             {
+                it.remove();
                 return item.getKey();
             }
         }
