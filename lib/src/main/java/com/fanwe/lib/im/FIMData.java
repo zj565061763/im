@@ -4,12 +4,18 @@ package com.fanwe.lib.im;
  * Created by zhengjun on 2017/11/22.
  */
 
-public abstract class FIMData
+public interface FIMData<T>
 {
-    private int type;
+    /**
+     * 返回数据类型
+     * @return
+     */
+    int getType();
 
-    public int getType()
-    {
-        return type;
-    }
+    /**
+     * 解析为第三方SDK的消息
+     * @return
+     * @throws Exception
+     */
+    T parseToSDKMsg() throws Exception;
 }

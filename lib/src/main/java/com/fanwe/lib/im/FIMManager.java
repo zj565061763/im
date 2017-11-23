@@ -3,6 +3,7 @@ package com.fanwe.lib.im;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,8 @@ public class FIMManager
 
     private Map<FIMResultCallback, String> mMapCallback = new WeakHashMap<>();
     private long mCallbackId = 0;
+
+    private Map<Integer, Class> mMapDataClass = new HashMap<>();
 
     private List<FIMMsgCallback> mListMsgCallback = new ArrayList<>();
 
@@ -54,6 +57,11 @@ public class FIMManager
         return mIMHandler;
     }
 
+    /**
+     * 添加消息回调
+     *
+     * @param callback
+     */
     public void addMsgCallback(FIMMsgCallback callback)
     {
         if (callback == null || mListMsgCallback.contains(callback))
@@ -63,9 +71,42 @@ public class FIMManager
         mListMsgCallback.add(callback);
     }
 
+    /**
+     * 移除消息回调
+     *
+     * @param callback
+     */
     public void removeMsgCallback(FIMMsgCallback callback)
     {
         mListMsgCallback.remove(callback);
+    }
+
+    /**
+     * 添加数据Class
+     *
+     * @param dataType 数据类型
+     * @param clazz    对应的Class
+     * @param <T>
+     */
+    public <T extends FIMData> void addDataClass(int dataType, Class<T> clazz)
+    {
+        if (clazz == null)
+        {
+            return;
+        }
+        mMapDataClass.put(dataType, clazz);
+    }
+
+    /**
+     * 返回数据对应的Class
+     *
+     * @param dataType 数据类型
+     * @param <T>
+     * @return
+     */
+    public <T extends FIMData> Class<T> getDataClass(int dataType)
+    {
+        return mMapDataClass.get(dataType);
     }
 
     FIMMsgCallback mInternalMsgCallback = new FIMMsgCallback()
@@ -85,25 +126,25 @@ public class FIMManager
     /**
      * 发送C2C消息
      *
-     * @param id   对方id
+     * @param peer 对方id
      * @param data 要发送的数据
      * @return
      */
-    public boolean sendMsgC2C(String id, FIMData data, FIMResultCallback<FIMMsg> callback)
+    public boolean sendMsgC2C(String peer, FIMData data, FIMResultCallback<FIMMsg> callback)
     {
-        return getIMHandler().sendMsg(id, data, FIMConversationType.C2C, generateCallbackId(callback));
+        return getIMHandler().sendMsg(peer, data, FIMConversationType.C2C, generateCallbackId(callback));
     }
 
     /**
      * 发送Group消息
      *
-     * @param id   group id
+     * @param peer group id
      * @param data 要发送的数据
      * @return
      */
-    public boolean sendMsgGroup(String id, FIMData data, FIMResultCallback<FIMMsg> callback)
+    public boolean sendMsgGroup(String peer, FIMData data, FIMResultCallback<FIMMsg> callback)
     {
-        return getIMHandler().sendMsg(id, data, FIMConversationType.Group, generateCallbackId(callback));
+        return getIMHandler().sendMsg(peer, data, FIMConversationType.Group, generateCallbackId(callback));
     }
 
     public synchronized FIMResultCallback getCallback(String callbackId)

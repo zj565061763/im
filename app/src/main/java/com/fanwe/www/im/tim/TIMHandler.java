@@ -1,14 +1,12 @@
-package com.fanwe.www.im;
+package com.fanwe.www.im.tim;
 
 import com.fanwe.lib.im.FIMConversationType;
 import com.fanwe.lib.im.FIMData;
 import com.fanwe.lib.im.FIMHandler;
 import com.fanwe.lib.im.FIMManager;
 import com.fanwe.lib.im.FIMResultCallback;
-import com.google.gson.Gson;
 import com.tencent.TIMConversation;
 import com.tencent.TIMConversationType;
-import com.tencent.TIMCustomElem;
 import com.tencent.TIMManager;
 import com.tencent.TIMMessage;
 import com.tencent.TIMValueCallBack;
@@ -16,19 +14,19 @@ import com.tencent.TIMValueCallBack;
 /**
  * Created by Administrator on 2017/11/22.
  */
-public class TIMHandler implements FIMHandler
+public class TIMHandler implements FIMHandler<TIMMessage>
 {
     @Override
-    public boolean sendMsg(String id, FIMData data, FIMConversationType type, final String callbackId)
+    public boolean sendMsg(String peer, FIMData<TIMMessage> data, FIMConversationType type, final String callbackId)
     {
         TIMConversation conversation = null;
         switch (type)
         {
             case C2C:
-                conversation = TIMManager.getInstance().getConversation(TIMConversationType.C2C, id);
+                conversation = TIMManager.getInstance().getConversation(TIMConversationType.C2C, peer);
                 break;
             case Group:
-                conversation = TIMManager.getInstance().getConversation(TIMConversationType.Group, id);
+                conversation = TIMManager.getInstance().getConversation(TIMConversationType.Group, peer);
                 break;
             default:
                 break;
@@ -36,12 +34,8 @@ public class TIMHandler implements FIMHandler
 
         try
         {
-            String json = new Gson().toJson(data);
 
-            TIMMessage message = new TIMMessage();
-            TIMCustomElem elem = new TIMCustomElem();
-            elem.setData(json.getBytes("UTF-8"));
-            message.addElement(elem);
+            TIMMessage message = data.parseToSDKMsg();
             conversation.sendMessage(message, new TIMValueCallBack<TIMMessage>()
             {
                 @Override
