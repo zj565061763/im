@@ -1,5 +1,6 @@
 package com.fanwe.www.im.tim;
 
+import com.fanwe.lib.im.FIMConversation;
 import com.fanwe.lib.im.FIMConversationType;
 import com.fanwe.lib.im.FIMManager;
 import com.fanwe.lib.im.FIMMsgData;
@@ -42,20 +43,6 @@ public class AppIMMsgReceiver extends FIMMsgReceiver<TIMMessage>
     }
 
     @Override
-    public String getConversationPeer()
-    {
-        String peer = null;
-        if (timGroupSystemElem != null)
-        {
-            peer = timGroupSystemElem.getGroupId();
-        } else
-        {
-            peer = getSDKMsg().getConversation().getPeer();
-        }
-        return peer;
-    }
-
-    @Override
     public long getTimestamp()
     {
         return getSDKMsg().timestamp();
@@ -79,20 +66,53 @@ public class AppIMMsgReceiver extends FIMMsgReceiver<TIMMessage>
         }
     }
 
+    private FIMConversation mConversation;
+
     @Override
-    public FIMConversationType getConversationType()
+    public FIMConversation getConversation()
     {
-        switch (getSDKMsg().getConversation().getType())
+        if (mConversation == null)
         {
-            case C2C:
-                return FIMConversationType.C2C;
-            case Group:
-                return FIMConversationType.Group;
-            case System:
-                return FIMConversationType.System;
-            default:
-                return FIMConversationType.Invalid;
+            mConversation = new FIMConversation()
+            {
+                @Override
+                public String getPeer()
+                {
+                    String peer = null;
+                    if (timGroupSystemElem != null)
+                    {
+                        peer = timGroupSystemElem.getGroupId();
+                    } else
+                    {
+                        peer = getSDKMsg().getConversation().getPeer();
+                    }
+                    return peer;
+                }
+
+                @Override
+                public FIMConversationType getType()
+                {
+                    switch (getSDKMsg().getConversation().getType())
+                    {
+                        case C2C:
+                            return FIMConversationType.C2C;
+                        case Group:
+                            return FIMConversationType.Group;
+                        case System:
+                            return FIMConversationType.System;
+                        default:
+                            return FIMConversationType.Invalid;
+                    }
+                }
+
+                @Override
+                public long getUnreadMessageNum()
+                {
+                    return getSDKMsg().getConversation().getUnreadMessageNum();
+                }
+            };
         }
+        return mConversation;
     }
 
     @Override

@@ -11,11 +11,9 @@ public interface FIMMsg
 
     boolean isSelf();
 
-    String getConversationPeer();
-
     long getTimestamp();
 
     FIMMsgState getState();
 
-    FIMConversationType getConversationType();
+    FIMConversation getConversation();
 }
