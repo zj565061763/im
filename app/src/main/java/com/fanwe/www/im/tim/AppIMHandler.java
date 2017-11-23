@@ -54,14 +54,12 @@ public class AppIMHandler implements FIMHandler<TIMMessage>
                     if (callback != null)
                     {
                         AppIMMsgReceiver receiver = new AppIMMsgReceiver(timMessage);
-                        receiver.parse();
                         callback.onSuccess(receiver);
                     }
                 }
             });
 
             AppIMMsgReceiver receiver = new AppIMMsgReceiver(message);
-            receiver.parse();
 
             return receiver;
         } catch (Exception e)
