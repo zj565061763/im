@@ -1,8 +1,8 @@
 package com.fanwe.www.im.tim;
 
 import com.fanwe.lib.im.FIMConversationType;
-import com.fanwe.lib.im.FIMMsgData;
 import com.fanwe.lib.im.FIMManager;
+import com.fanwe.lib.im.FIMMsgData;
 import com.fanwe.lib.im.FIMMsgReceiver;
 import com.fanwe.lib.im.FIMMsgState;
 import com.fanwe.lib.im.FIMResultCallback;
@@ -33,6 +33,12 @@ public class TIMMsgReceiver extends FIMMsgReceiver<TIMMessage>
     public TIMMsgReceiver(TIMMessage sdkMsg)
     {
         super(sdkMsg);
+    }
+
+    @Override
+    protected FIMManager getIMManager()
+    {
+        return AppIMManager.getInstance();
     }
 
     @Override
@@ -145,7 +151,7 @@ public class TIMMsgReceiver extends FIMMsgReceiver<TIMMessage>
         {
             String json = new String(data, DEFAULT_CHARSET);
             int dataType = guessDataTypeFromJson(json);
-            Class clazz = FIMManager.getInstance().getDataClass(dataType);
+            Class clazz = getIMManager().getDataClass(dataType);
             if (clazz != null)
             {
                 result = (FIMMsgData) new Gson().fromJson(json, clazz);

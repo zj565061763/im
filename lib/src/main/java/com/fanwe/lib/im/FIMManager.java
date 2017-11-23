@@ -10,13 +10,12 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 /**
- * Created by zhengjun on 2017/11/22.
+ * IM管理基类
+ *
+ * @param <M> 第三方IM消息类型
  */
-public class FIMManager
+public abstract class FIMManager<M>
 {
-    private static FIMManager sInstance;
-    private FIMHandler mIMHandler;
-
     private Map<FIMResultCallback, String> mMapCallback = new WeakHashMap<>();
     private long mCallbackId = 0;
 
@@ -24,37 +23,8 @@ public class FIMManager
 
     private List<FIMMsgCallback> mListMsgCallback = new ArrayList<>();
 
-    private FIMManager()
+    protected FIMManager()
     {
-    }
-
-    public static FIMManager getInstance()
-    {
-        if (sInstance == null)
-        {
-            synchronized (FIMManager.class)
-            {
-                if (sInstance == null)
-                {
-                    sInstance = new FIMManager();
-                }
-            }
-        }
-        return sInstance;
-    }
-
-    public void setIMHandler(FIMHandler handler)
-    {
-        mIMHandler = handler;
-    }
-
-    public FIMHandler getIMHandler()
-    {
-        if (mIMHandler == null)
-        {
-            mIMHandler = FIMHandler.DEFAULT;
-        }
-        return mIMHandler;
     }
 
     /**
@@ -62,7 +32,7 @@ public class FIMManager
      *
      * @param callback
      */
-    public void addMsgCallback(FIMMsgCallback callback)
+    public final void addMsgCallback(FIMMsgCallback callback)
     {
         if (callback == null || mListMsgCallback.contains(callback))
         {
@@ -76,7 +46,7 @@ public class FIMManager
      *
      * @param callback
      */
-    public void removeMsgCallback(FIMMsgCallback callback)
+    public final void removeMsgCallback(FIMMsgCallback callback)
     {
         mListMsgCallback.remove(callback);
     }
@@ -86,9 +56,9 @@ public class FIMManager
      *
      * @param dataType 数据类型
      * @param clazz    对应的Class
-     * @param <T>
+     * @param <D>
      */
-    public <T extends FIMMsgData> void addDataClass(int dataType, Class<T> clazz)
+    public final <D extends FIMMsgData> void addDataClass(int dataType, Class<D> clazz)
     {
         if (clazz == null)
         {
@@ -101,10 +71,10 @@ public class FIMManager
      * 返回数据对应的Class
      *
      * @param dataType 数据类型
-     * @param <T>
+     * @param <D>
      * @return
      */
-    public <T extends FIMMsgData> Class<T> getDataClass(int dataType)
+    public final <D extends FIMMsgData> Class<D> getDataClass(int dataType)
     {
         return mMapDataClass.get(dataType);
     }
@@ -129,9 +99,9 @@ public class FIMManager
      * @param peer 对方id
      * @param data 要发送的数据
      */
-    public void sendMsgC2C(String peer, FIMMsgData data, FIMResultCallback<FIMMsg> callback)
+    public final M sendMsgC2C(String peer, FIMMsgData<M> data, FIMResultCallback<FIMMsg> callback)
     {
-        getIMHandler().sendMsg(peer, data, FIMConversationType.C2C, generateCallbackId(callback));
+        return onSendMsg(peer, data, FIMConversationType.C2C, generateCallbackId(callback));
     }
 
     /**
@@ -140,12 +110,12 @@ public class FIMManager
      * @param peer group id
      * @param data 要发送的数据
      */
-    public void sendMsgGroup(String peer, FIMMsgData data, FIMResultCallback<FIMMsg> callback)
+    public final M sendMsgGroup(String peer, FIMMsgData<M> data, FIMResultCallback<FIMMsg> callback)
     {
-        getIMHandler().sendMsg(peer, data, FIMConversationType.Group, generateCallbackId(callback));
+        return onSendMsg(peer, data, FIMConversationType.Group, generateCallbackId(callback));
     }
 
-    public synchronized FIMResultCallback getCallback(String callbackId)
+    public final synchronized FIMResultCallback getCallback(String callbackId)
     {
         if (TextUtils.isEmpty(callbackId))
         {
@@ -178,4 +148,15 @@ public class FIMManager
         mMapCallback.put(callback, result);
         return result;
     }
+
+    /**
+     * 发送消息
+     *
+     * @param peer       对方id
+     * @param data       消息数据
+     * @param type       消息类型
+     * @param callbackId 回调对象id
+     * @return
+     */
+    abstract protected M onSendMsg(String peer, FIMMsgData<M> data, FIMConversationType type, final String callbackId);
 }

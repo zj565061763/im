@@ -1,9 +1,8 @@
 package com.fanwe.www.im.tim;
 
 import com.fanwe.lib.im.FIMConversationType;
-import com.fanwe.lib.im.FIMMsgData;
-import com.fanwe.lib.im.FIMHandler;
 import com.fanwe.lib.im.FIMManager;
+import com.fanwe.lib.im.FIMMsgData;
 import com.fanwe.lib.im.FIMResultCallback;
 import com.tencent.TIMConversation;
 import com.tencent.TIMConversationType;
@@ -12,12 +11,23 @@ import com.tencent.TIMMessage;
 import com.tencent.TIMValueCallBack;
 
 /**
- * Created by Administrator on 2017/11/22.
+ * Created by Administrator on 2017/11/23.
  */
-public class TIMHandler implements FIMHandler<TIMMessage>
+public class AppIMManager extends FIMManager<TIMMessage>
 {
+    private static final AppIMManager INSTANCE = new AppIMManager();
+
+    private AppIMManager()
+    {
+    }
+
+    public static AppIMManager getInstance()
+    {
+        return INSTANCE;
+    }
+
     @Override
-    public void sendMsg(String peer, FIMMsgData<TIMMessage> data, FIMConversationType type, final String callbackId)
+    protected TIMMessage onSendMsg(String peer, FIMMsgData<TIMMessage> data, FIMConversationType type, final String callbackId)
     {
         TIMConversation conversation = null;
         switch (type)
@@ -31,7 +41,6 @@ public class TIMHandler implements FIMHandler<TIMMessage>
             default:
                 break;
         }
-
         try
         {
             TIMMessage message = data.parseToSDKMsg();
@@ -40,7 +49,7 @@ public class TIMHandler implements FIMHandler<TIMMessage>
                 @Override
                 public void onError(int code, String msg)
                 {
-                    FIMResultCallback callback = FIMManager.getInstance().getCallback(callbackId);
+                    FIMResultCallback callback = getCallback(callbackId);
                     if (callback != null)
                     {
                         callback.onError(code, msg);
@@ -50,7 +59,7 @@ public class TIMHandler implements FIMHandler<TIMMessage>
                 @Override
                 public void onSuccess(TIMMessage timMessage)
                 {
-                    FIMResultCallback callback = FIMManager.getInstance().getCallback(callbackId);
+                    FIMResultCallback callback = getCallback(callbackId);
                     if (callback != null)
                     {
                         TIMMsgReceiver receiver = new TIMMsgReceiver(timMessage);
@@ -59,9 +68,11 @@ public class TIMHandler implements FIMHandler<TIMMessage>
                     }
                 }
             });
+            return message;
         } catch (Exception e)
         {
             e.printStackTrace();
         }
+        return null;
     }
 }

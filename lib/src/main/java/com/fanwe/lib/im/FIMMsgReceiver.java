@@ -106,7 +106,7 @@ public abstract class FIMMsgReceiver<T> implements FIMMsg
         final FIMMsg msg = this;
         if (Looper.myLooper() == Looper.getMainLooper())
         {
-            FIMManager.getInstance().mInternalMsgCallback.onReceiveMsg(msg);
+            getIMManager().mInternalMsgCallback.onReceiveMsg(msg);
         } else
         {
             new Handler(Looper.getMainLooper()).post(new Runnable()
@@ -119,6 +119,8 @@ public abstract class FIMMsgReceiver<T> implements FIMMsg
             });
         }
     }
+
+    protected abstract FIMManager getIMManager();
 
     /**
      * 是否有需要下载的数据，true-需要<br>

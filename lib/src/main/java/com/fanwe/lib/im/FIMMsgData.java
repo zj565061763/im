@@ -17,9 +17,8 @@ public interface FIMMsgData<T>
      * 将当前数据解析为第三方SDK的消息
      *
      * @return
-     * @throws Exception
      */
-    T parseToSDKMsg() throws Exception;
+    T parseToSDKMsg();
 
     /**
      * 将数据解析为FIM消息
