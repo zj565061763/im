@@ -20,7 +20,7 @@ import com.tencent.TIMTextElem;
  * Created by Administrator on 2017/11/23.
  */
 
-public class TIMMsgReceiver extends FIMMsgReceiver<TIMMessage>
+public class AppIMMsgReceiver extends FIMMsgReceiver<TIMMessage>
 {
     public static final String DEFAULT_CHARSET = "UTF-8";
 
@@ -30,15 +30,9 @@ public class TIMMsgReceiver extends FIMMsgReceiver<TIMMessage>
     private TIMSoundElem timSoundElem;
     private TIMTextElem timTextElem;
 
-    public TIMMsgReceiver(TIMMessage sdkMsg)
+    public AppIMMsgReceiver(TIMMessage sdkMsg)
     {
         super(sdkMsg);
-    }
-
-    @Override
-    protected FIMManager<TIMMessage> getIMManager()
-    {
-        return AppIMManager.getInstance();
     }
 
     @Override
@@ -151,7 +145,7 @@ public class TIMMsgReceiver extends FIMMsgReceiver<TIMMessage>
         {
             String json = new String(data, DEFAULT_CHARSET);
             int dataType = guessDataTypeFromJson(json);
-            Class clazz = getIMManager().getDataClass(dataType);
+            Class clazz = FIMManager.getInstance().getDataClass(dataType);
             if (clazz != null)
             {
                 result = (FIMMsgData) new Gson().fromJson(json, clazz);

@@ -1,10 +1,11 @@
 package com.fanwe.lib.im;
 
 /**
- * Created by zhengjun on 2017/11/22.
+ * IM消息数据
+ *
+ * @param <M> 第三方IM消息类型
  */
-
-public interface FIMMsgData<T>
+public interface FIMMsgData<M>
 {
     /**
      * 返回数据类型
@@ -18,7 +19,7 @@ public interface FIMMsgData<T>
      *
      * @return
      */
-    T parseToSDKMsg();
+    M parseToSDKMsg();
 
     /**
      * 将数据解析为FIM消息

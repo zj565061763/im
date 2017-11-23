@@ -11,11 +11,12 @@ import java.util.WeakHashMap;
 
 /**
  * IM管理基类
- *
- * @param <M> 第三方IM消息类型
  */
-public abstract class FIMManager<M>
+public class FIMManager
 {
+    private static FIMManager sInstance;
+
+    private FIMHandler mIMHandler;
     private Map<FIMResultCallback, String> mMapCallback = new WeakHashMap<>();
     private long mCallbackId = 0;
 
@@ -23,8 +24,37 @@ public abstract class FIMManager<M>
 
     private List<FIMMsgCallback> mListMsgCallback = new ArrayList<>();
 
-    protected FIMManager()
+    private FIMManager()
     {
+    }
+
+    public static FIMManager getInstance()
+    {
+        if (sInstance == null)
+        {
+            synchronized (FIMManager.class)
+            {
+                if (sInstance == null)
+                {
+                    sInstance = new FIMManager();
+                }
+            }
+        }
+        return sInstance;
+    }
+
+    public final void setIMHandler(FIMHandler handler)
+    {
+        mIMHandler = handler;
+    }
+
+    public FIMHandler getIMHandler()
+    {
+        if (mIMHandler == null)
+        {
+            mIMHandler = FIMHandler.DEFAULT;
+        }
+        return mIMHandler;
     }
 
     /**
@@ -98,10 +128,11 @@ public abstract class FIMManager<M>
      *
      * @param peer 对方id
      * @param data 要发送的数据
+     * @return
      */
-    public final M sendMsgC2C(String peer, FIMMsgData<M> data, FIMResultCallback<FIMMsg> callback)
+    public final FIMMsg sendMsgC2C(String peer, FIMMsgData data, FIMResultCallback<FIMMsg> callback)
     {
-        return onSendMsg(peer, data, FIMConversationType.C2C, generateCallbackId(callback));
+        return getIMHandler().sendMsg(peer, data, FIMConversationType.C2C, generateCallbackId(callback));
     }
 
     /**
@@ -109,10 +140,11 @@ public abstract class FIMManager<M>
      *
      * @param peer group id
      * @param data 要发送的数据
+     * @return
      */
-    public final M sendMsgGroup(String peer, FIMMsgData<M> data, FIMResultCallback<FIMMsg> callback)
+    public final FIMMsg sendMsgGroup(String peer, FIMMsgData data, FIMResultCallback<FIMMsg> callback)
     {
-        return onSendMsg(peer, data, FIMConversationType.Group, generateCallbackId(callback));
+        return getIMHandler().sendMsg(peer, data, FIMConversationType.Group, generateCallbackId(callback));
     }
 
     public final synchronized FIMResultCallback getCallback(String callbackId)
@@ -148,15 +180,4 @@ public abstract class FIMManager<M>
         mMapCallback.put(callback, result);
         return result;
     }
-
-    /**
-     * 发送消息
-     *
-     * @param peer       对方id
-     * @param data       消息数据
-     * @param type       消息类型
-     * @param callbackId 回调对象id
-     * @return
-     */
-    abstract protected M onSendMsg(String peer, FIMMsgData<M> data, FIMConversationType type, final String callbackId);
 }
