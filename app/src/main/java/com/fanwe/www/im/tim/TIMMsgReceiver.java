@@ -125,14 +125,8 @@ public class TIMMsgReceiver extends FIMMsgReceiver<TIMMessage>
     }
 
     @Override
-    public boolean isNeedDownloadData()
+    public boolean isNeedDownloadData(FIMResultCallback callback)
     {
         return false;
-    }
-
-    @Override
-    public void startDonloadData(FIMResultCallback callback)
-    {
-
     }
 }
