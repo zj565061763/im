@@ -10,6 +10,7 @@ import org.json.JSONObject;
 public abstract class FIMMsgReceiver<T> implements FIMMsg
 {
     public static final String FIELD_NAME_GUESS_DATA_TYPE = "type";
+    public static final int EMPTY_DATA_TYPE = -1;
 
     private T mSDKMsg;
 
@@ -28,11 +29,22 @@ public abstract class FIMMsgReceiver<T> implements FIMMsg
         return FIELD_NAME_GUESS_DATA_TYPE;
     }
 
+    /**
+     * 从json串中猜测数据类型
+     *
+     * @param json
+     * @return
+     */
     public int guessDataTypeFromJson(String json)
     {
         if (TextUtils.isEmpty(json))
         {
-            return -1;
+            return EMPTY_DATA_TYPE;
+        }
+        final String fieldName = getFieldNameGuessDataType();
+        if (TextUtils.isEmpty(fieldName))
+        {
+            return EMPTY_DATA_TYPE;
         }
         try
         {
@@ -42,7 +54,7 @@ public abstract class FIMMsgReceiver<T> implements FIMMsg
         {
             e.printStackTrace();
         }
-        return -1;
+        return EMPTY_DATA_TYPE;
     }
 
     /**
