@@ -13,6 +13,7 @@ public abstract class FIMMsgReceiver<T> implements FIMMsg
     public static final int EMPTY_DATA_TYPE = -1;
 
     private T mSDKMsg;
+    private FIMData mData;
 
     public FIMMsgReceiver(T sdkMsg)
     {
@@ -22,6 +23,22 @@ public abstract class FIMMsgReceiver<T> implements FIMMsg
     public final T getSDKMsg()
     {
         return mSDKMsg;
+    }
+
+    @Override
+    public int getDataType()
+    {
+        if (mData != null)
+        {
+            return mData.getType();
+        }
+        return 0;
+    }
+
+    @Override
+    public FIMData getData()
+    {
+        return mData;
     }
 
     protected String getFieldNameGuessDataType()
@@ -64,7 +81,7 @@ public abstract class FIMMsgReceiver<T> implements FIMMsg
     {
         try
         {
-            onParseSDKMsg();
+            mData = onParseSDKMsg();
         } catch (Exception e)
         {
             onError(e);
@@ -80,9 +97,12 @@ public abstract class FIMMsgReceiver<T> implements FIMMsg
     }
 
     /**
-     * 解析第三方的SDK消息
+     * 将第三方的SDK消息解析为数据
+     *
+     * @return
+     * @throws Exception
      */
-    protected abstract void onParseSDKMsg() throws Exception;
+    protected abstract FIMData<T> onParseSDKMsg() throws Exception;
 
     protected void onError(Exception e)
     {

@@ -21,27 +21,9 @@ public class TIMMsgReceiver extends FIMMsgReceiver<TIMMessage>
     private TIMCustomElem timCustomElem;
     private TIMGroupSystemElem timGroupSystemElem;
 
-    private FIMData mData;
-
     public TIMMsgReceiver(TIMMessage sdkMsg)
     {
         super(sdkMsg);
-    }
-
-    @Override
-    public int getDataType()
-    {
-        if (mData != null)
-        {
-            return mData.getType();
-        }
-        return 0;
-    }
-
-    @Override
-    public FIMData getData()
-    {
-        return mData;
     }
 
     @Override
@@ -71,8 +53,10 @@ public class TIMMsgReceiver extends FIMMsgReceiver<TIMMessage>
     }
 
     @Override
-    protected void onParseSDKMsg() throws Exception
+    protected FIMData<TIMMessage> onParseSDKMsg() throws Exception
     {
+        FIMData result = null;
+
         long count = getSDKMsg().getElementCount();
         TIMElem elem = null;
         for (int i = 0; i < count; i++)
@@ -112,9 +96,11 @@ public class TIMMsgReceiver extends FIMMsgReceiver<TIMMessage>
             Class clazz = FIMManager.getInstance().getDataClass(dataType);
             if (clazz != null)
             {
-                mData = (FIMData) new Gson().fromJson(json, clazz);
+                result = (FIMData) new Gson().fromJson(json, clazz);
             }
         }
+
+        return result;
     }
 
 }

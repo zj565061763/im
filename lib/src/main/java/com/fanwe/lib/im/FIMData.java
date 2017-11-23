@@ -14,7 +14,7 @@ public interface FIMData<T>
     int getType();
 
     /**
-     * 解析为第三方SDK的消息
+     * 将当前数据解析为第三方SDK的消息
      *
      * @return
      * @throws Exception
