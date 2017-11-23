@@ -1,8 +1,10 @@
 package com.fanwe.www.im.tim;
 
+import com.fanwe.lib.im.FIMConversationType;
 import com.fanwe.lib.im.FIMData;
 import com.fanwe.lib.im.FIMManager;
 import com.fanwe.lib.im.FIMMsgReceiver;
+import com.fanwe.lib.im.FIMMsgState;
 import com.fanwe.lib.im.FIMResultCallback;
 import com.google.gson.Gson;
 import com.tencent.TIMCustomElem;
@@ -57,6 +59,40 @@ public class TIMMsgReceiver extends FIMMsgReceiver<TIMMessage>
     public long getTimestamp()
     {
         return getSDKMsg().timestamp();
+    }
+
+    @Override
+    public FIMMsgState getState()
+    {
+        switch (getSDKMsg().status())
+        {
+            case SendFail:
+                return FIMMsgState.SendFail;
+            case Sending:
+                return FIMMsgState.Sending;
+            case SendSucc:
+                return FIMMsgState.SendSuccess;
+            case HasDeleted:
+                return FIMMsgState.HasDeleted;
+            default:
+                return FIMMsgState.Invalid;
+        }
+    }
+
+    @Override
+    public FIMConversationType getConversationType()
+    {
+        switch (getSDKMsg().getConversation().getType())
+        {
+            case C2C:
+                return FIMConversationType.C2C;
+            case Group:
+                return FIMConversationType.Group;
+            case System:
+                return FIMConversationType.System;
+            default:
+                return FIMConversationType.Invalid;
+        }
     }
 
     @Override

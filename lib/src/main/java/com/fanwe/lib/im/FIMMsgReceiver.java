@@ -78,8 +78,10 @@ public abstract class FIMMsgReceiver<T> implements FIMMsg
 
     /**
      * 解析第三方的SDK消息
+     *
+     * @return
      */
-    public final void parse()
+    public final FIMData<T> parse()
     {
         try
         {
@@ -88,10 +90,12 @@ public abstract class FIMMsgReceiver<T> implements FIMMsg
             {
                 onFillData(mData);
             }
+            return mData;
         } catch (Exception e)
         {
             onError(e);
         }
+        return null;
     }
 
     /**

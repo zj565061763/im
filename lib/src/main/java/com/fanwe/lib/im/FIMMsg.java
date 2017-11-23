@@ -14,4 +14,8 @@ public interface FIMMsg
     String getConversationtPeer();
 
     long getTimestamp();
+
+    FIMMsgState getState();
+
+    FIMConversationType getConversationType();
 }
