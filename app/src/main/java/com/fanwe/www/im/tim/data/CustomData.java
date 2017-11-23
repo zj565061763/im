@@ -1,7 +1,6 @@
 package com.fanwe.www.im.tim.data;
 
 import com.fanwe.lib.im.FIMData;
-import com.fanwe.lib.im.FIMMsgReceiver;
 import com.google.gson.Gson;
 import com.tencent.TIMCustomElem;
 import com.tencent.TIMMessage;
@@ -22,11 +21,5 @@ public abstract class CustomData implements FIMData<TIMMessage>
         elem.setData(json.getBytes("UTF-8"));
         message.addElement(elem);
         return message;
-    }
-
-    @Override
-    public void onReceiveSDKMsg(FIMMsgReceiver<TIMMessage> receiver)
-    {
-
     }
 }
