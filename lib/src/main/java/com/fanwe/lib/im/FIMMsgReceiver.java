@@ -24,6 +24,11 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
         parse(sdkMsg);
     }
 
+    /**
+     * 返回第三发IM消息对象
+     *
+     * @return
+     */
     public final M getSDKMsg()
     {
         return mSDKMsg;
@@ -45,6 +50,11 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
         return mData;
     }
 
+    /**
+     * 返回用于猜测数据类型的json字段名称
+     *
+     * @return
+     */
     protected String getFieldNameGuessDataType()
     {
         return FIELD_NAME_GUESS_DATA_TYPE;
@@ -76,6 +86,18 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
             e.printStackTrace();
         }
         return EMPTY_DATA_TYPE;
+    }
+
+    /**
+     * 从json串中猜测对应的数据Class对象
+     *
+     * @param json
+     * @return
+     */
+    public Class guessDataClassFromJson(String json)
+    {
+        int dataType = guessDataTypeFromJson(json);
+        return FIMManager.getInstance().getDataClass(dataType);
     }
 
     /**
@@ -144,8 +166,19 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
      */
     protected abstract FIMMsgData<M> onParseSDKMsg() throws Exception;
 
+    /**
+     * 填充解析好的数据
+     *
+     * @param data
+     * @throws Exception
+     */
     protected abstract void onFillData(FIMMsgData<M> data) throws Exception;
 
+    /**
+     * 解析异常回调
+     *
+     * @param e
+     */
     protected void onError(Exception e)
     {
 
