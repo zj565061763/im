@@ -46,7 +46,7 @@ public class FIMManager
         mIMHandler = handler;
     }
 
-    public FIMHandler getIMHandler()
+    public final FIMHandler getIMHandler()
     {
         if (mIMHandler == null)
         {
