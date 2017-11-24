@@ -1,7 +1,7 @@
 package com.fanwe.lib.im;
 
 /**
- * Created by zhengjun on 2017/11/22.
+ * IM通用的结果回调
  */
 public interface FIMResultCallback<T>
 {

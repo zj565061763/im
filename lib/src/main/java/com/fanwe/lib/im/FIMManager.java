@@ -1,13 +1,10 @@
 package com.fanwe.lib.im;
 
-import android.text.TextUtils;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.WeakHashMap;
 
 /**
  * IM管理基类
@@ -17,7 +14,8 @@ public class FIMManager
     private static FIMManager sInstance;
 
     private FIMHandler mIMHandler;
-    private Map<FIMResultCallback, String> mMapCallback = new WeakHashMap<>();
+
+    private Map<String, FIMResultCallback> mMapCallback = new HashMap<>();
     private long mCallbackId = 0;
 
     private Map<Integer, Class> mMapDataClass = new HashMap<>();
@@ -161,25 +159,24 @@ public class FIMManager
         return getIMHandler().sendMsg(peer, data, FIMConversationType.Group, generateCallbackId(callback));
     }
 
-    public final synchronized FIMResultCallback getCallback(String callbackId)
+    /**
+     * 返回结果回调
+     *
+     * @param callbackId
+     * @return
+     */
+    public final synchronized FIMResultCallback removeResultCallback(String callbackId)
     {
-        if (TextUtils.isEmpty(callbackId))
-        {
-            return null;
-        }
-        Iterator<Map.Entry<FIMResultCallback, String>> it = mMapCallback.entrySet().iterator();
-        while (it.hasNext())
-        {
-            Map.Entry<FIMResultCallback, String> item = it.next();
-            if (callbackId.equals(item.getValue()))
-            {
-                it.remove();
-                return item.getKey();
-            }
-        }
-        return null;
+        FIMResultCallback callback = mMapCallback.remove(callbackId);
+        return callback;
     }
 
+    /**
+     * 生成callback的标识
+     *
+     * @param callback
+     * @return
+     */
     private synchronized String generateCallbackId(FIMResultCallback callback)
     {
         if (callback == null)
@@ -192,7 +189,7 @@ public class FIMManager
         }
         mCallbackId++;
         String result = String.valueOf(mCallbackId);
-        mMapCallback.put(callback, result);
+        mMapCallback.put(result, callback);
         return result;
     }
 }
