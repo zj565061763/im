@@ -118,13 +118,13 @@ public class FIMManager
     {
 
         @Override
-        public boolean ignoreMsg(FIMMsg imMsg)
+        public boolean ignoreMsg(FIMMsg fimMsg)
         {
             return false;
         }
 
         @Override
-        public void onReceiveMsg(FIMMsg imMsg)
+        public void onReceiveMsg(FIMMsg fimMsg)
         {
             synchronized (FIMManager.this)
             {
@@ -133,12 +133,12 @@ public class FIMManager
                 {
                     FIMMsgCallback item = it.next();
 
-                    if (item.ignoreMsg(imMsg))
+                    if (item.ignoreMsg(fimMsg))
                     {
                         // 忽略当前消息
                     } else
                     {
-                        item.onReceiveMsg(imMsg);
+                        item.onReceiveMsg(fimMsg);
                     }
                 }
             }

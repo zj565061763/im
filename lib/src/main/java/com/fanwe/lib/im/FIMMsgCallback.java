@@ -8,15 +8,15 @@ public interface FIMMsgCallback
     /**
      * 是否忽略当前消息
      *
-     * @param imMsg
+     * @param fimMsg
      * @return true-忽略
      */
-    boolean ignoreMsg(FIMMsg imMsg);
+    boolean ignoreMsg(FIMMsg fimMsg);
 
     /**
      * 消息回调方法
      *
-     * @param imMsg
+     * @param fimMsg
      */
-    void onReceiveMsg(FIMMsg imMsg);
+    void onReceiveMsg(FIMMsg fimMsg);
 }
