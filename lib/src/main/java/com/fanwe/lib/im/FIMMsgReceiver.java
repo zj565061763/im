@@ -21,8 +21,7 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
 
     public FIMMsgReceiver(M sdkMsg)
     {
-        mSDKMsg = sdkMsg;
-        parse();
+        parse(sdkMsg);
     }
 
     public final M getSDKMsg()
@@ -84,19 +83,29 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
      *
      * @return
      */
-    private void parse()
+    public synchronized boolean parse(M sdkMsg)
     {
+        if (sdkMsg == null)
+        {
+            return false;
+        }
         try
         {
+            mSDKMsg = sdkMsg;
             mData = onParseSDKMsg();
             if (mData != null)
             {
                 onFillData(mData);
+                return true;
+            } else
+            {
+                return false;
             }
         } catch (Exception e)
         {
             onError(e);
         }
+        return false;
     }
 
     /**
