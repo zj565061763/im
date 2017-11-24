@@ -34,7 +34,8 @@ public class AppIMHandler implements FIMHandler<TIMMessage>
         }
         try
         {
-            TIMMessage message = data.parseToSDKMsg();
+            final TIMMessage message = data.parseToSDKMsg();
+            final AppIMMsgReceiver receiver = new AppIMMsgReceiver(message);
             conversation.sendMessage(message, new TIMValueCallBack<TIMMessage>()
             {
                 @Override
@@ -53,13 +54,11 @@ public class AppIMHandler implements FIMHandler<TIMMessage>
                     FIMResultCallback callback = FIMManager.getInstance().getCallback(callbackId);
                     if (callback != null)
                     {
-                        AppIMMsgReceiver receiver = new AppIMMsgReceiver(timMessage);
+                        receiver.parse(timMessage);
                         callback.onSuccess(receiver);
                     }
                 }
             });
-
-            AppIMMsgReceiver receiver = new AppIMMsgReceiver(message);
 
             return receiver;
         } catch (Exception e)
