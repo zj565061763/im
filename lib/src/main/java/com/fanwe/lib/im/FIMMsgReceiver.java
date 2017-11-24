@@ -66,7 +66,7 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
      * @param json
      * @return
      */
-    public int guessDataTypeFromJson(String json)
+    protected int guessDataTypeFromJson(String json)
     {
         if (TextUtils.isEmpty(json))
         {
