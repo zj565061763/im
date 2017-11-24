@@ -15,8 +15,8 @@ public class FIMManager
 
     private FIMHandler mIMHandler;
 
-    private Map<String, FIMResultCallback> mMapCallback = new HashMap<>();
-    private long mCallbackId = 0;
+    private Map<String, FIMResultCallback> mMapResultCallback = new HashMap<>();
+    private long mResultCallbackId = 0;
 
     private Map<Integer, Class> mMapDataClass = new HashMap<>();
 
@@ -167,7 +167,7 @@ public class FIMManager
      */
     public final synchronized FIMResultCallback removeResultCallback(String callbackId)
     {
-        FIMResultCallback callback = mMapCallback.remove(callbackId);
+        FIMResultCallback callback = mMapResultCallback.remove(callbackId);
         return callback;
     }
 
@@ -183,13 +183,13 @@ public class FIMManager
         {
             return null;
         }
-        if (mCallbackId >= Long.MAX_VALUE)
+        if (mResultCallbackId >= Long.MAX_VALUE)
         {
-            mCallbackId = 0;
+            mResultCallbackId = 0;
         }
-        mCallbackId++;
-        String result = String.valueOf(mCallbackId);
-        mMapCallback.put(result, callback);
+        mResultCallbackId++;
+        String result = String.valueOf(mResultCallbackId);
+        mMapResultCallback.put(result, callback);
         return result;
     }
 }
