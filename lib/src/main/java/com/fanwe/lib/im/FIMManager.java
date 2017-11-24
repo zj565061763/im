@@ -41,11 +41,21 @@ public class FIMManager
         return sInstance;
     }
 
+    /**
+     * 设置IM处理对象
+     *
+     * @param handler
+     */
     public final void setIMHandler(FIMHandler handler)
     {
         mIMHandler = handler;
     }
 
+    /**
+     * 返回IM处理类
+     *
+     * @return
+     */
     public final FIMHandler getIMHandler()
     {
         if (mIMHandler == null)
