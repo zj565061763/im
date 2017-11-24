@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * IM管理基类
@@ -18,10 +19,7 @@ public class FIMManager
     private FIMHandler mIMHandler;
 
     private Map<String, FIMResultCallbackInfo> mMapResultCallback = new HashMap<>();
-    private long mResultCallbackId = 0;
-
     private Map<Integer, Class> mMapDataClass = new HashMap<>();
-
     private List<FIMMsgCallback> mListMsgCallback = new ArrayList<>();
 
     private FIMManager()
@@ -220,16 +218,11 @@ public class FIMManager
         {
             return null;
         }
-        if (mResultCallbackId >= Long.MAX_VALUE)
-        {
-            mResultCallbackId = 0;
-        }
-        mResultCallbackId++;
 
-        String id = String.valueOf(mResultCallbackId);
+        final String callbackId = String.valueOf(UUID.randomUUID());
         FIMResultCallbackInfo info = new FIMResultCallbackInfo(callback, callback.getTag());
 
-        mMapResultCallback.put(id, info);
-        return id;
+        mMapResultCallback.put(callbackId, info);
+        return callbackId;
     }
 }
