@@ -1,5 +1,7 @@
 package com.fanwe.lib.im;
 
+import android.text.TextUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -15,7 +17,7 @@ public class FIMManager
 
     private FIMHandler mIMHandler;
 
-    private Map<String, FIMResultCallback> mMapResultCallback = new HashMap<>();
+    private Map<String, FIMResultCallbackInfo> mMapResultCallback = new HashMap<>();
     private long mResultCallbackId = 0;
 
     private Map<Integer, Class> mMapDataClass = new HashMap<>();
@@ -160,15 +162,50 @@ public class FIMManager
     }
 
     /**
-     * 返回结果回调
+     * 移除并返回结果回调
      *
      * @param callbackId
      * @return
      */
     public final synchronized FIMResultCallback removeResultCallback(String callbackId)
     {
-        FIMResultCallback callback = mMapResultCallback.remove(callbackId);
-        return callback;
+        FIMResultCallbackInfo info = mMapResultCallback.remove(callbackId);
+        if (info != null)
+        {
+            return info.callback;
+        } else
+        {
+            return null;
+        }
+    }
+
+    /**
+     * 根据tag移除结果回调
+     *
+     * @param tag
+     * @return 移除的数量
+     */
+    public final synchronized int removeResultCallbackByTag(String tag)
+    {
+        int count = 0;
+        if (TextUtils.isEmpty(tag))
+        {
+            return count;
+        }
+
+        Iterator<Map.Entry<String, FIMResultCallbackInfo>> it = mMapResultCallback.entrySet().iterator();
+        while (it.hasNext())
+        {
+            Map.Entry<String, FIMResultCallbackInfo> item = it.next();
+            FIMResultCallbackInfo info = item.getValue();
+            if (tag.equals(info.tag))
+            {
+                it.remove();
+                count++;
+            }
+        }
+
+        return count;
     }
 
     /**
@@ -188,8 +225,11 @@ public class FIMManager
             mResultCallbackId = 0;
         }
         mResultCallbackId++;
-        String result = String.valueOf(mResultCallbackId);
-        mMapResultCallback.put(result, callback);
-        return result;
+
+        String id = String.valueOf(mResultCallbackId);
+        FIMResultCallbackInfo info = new FIMResultCallbackInfo(callback, callback.getTag());
+
+        mMapResultCallback.put(id, info);
+        return id;
     }
 }
