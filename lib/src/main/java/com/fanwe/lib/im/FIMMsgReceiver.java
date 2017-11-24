@@ -61,34 +61,6 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
     }
 
     /**
-     * 从json串中猜测数据类型
-     *
-     * @param json
-     * @return
-     */
-    public int guessDataTypeFromJson(String json)
-    {
-        if (TextUtils.isEmpty(json))
-        {
-            return EMPTY_DATA_TYPE;
-        }
-        final String fieldName = getFieldNameGuessDataType();
-        if (TextUtils.isEmpty(fieldName))
-        {
-            return EMPTY_DATA_TYPE;
-        }
-        try
-        {
-            JSONObject jsonObject = new JSONObject(json);
-            return jsonObject.optInt(getFieldNameGuessDataType(), -1);
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return EMPTY_DATA_TYPE;
-    }
-
-    /**
      * 从json串中猜测对应的数据Class对象
      *
      * @param json
@@ -96,8 +68,25 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
      */
     public Class guessDataClassFromJson(String json)
     {
-        int dataType = guessDataTypeFromJson(json);
-        return FIMManager.getInstance().getDataClass(dataType);
+        if (TextUtils.isEmpty(json))
+        {
+            return null;
+        }
+        final String fieldName = getFieldNameGuessDataType();
+        if (TextUtils.isEmpty(fieldName))
+        {
+            return null;
+        }
+        try
+        {
+            JSONObject jsonObject = new JSONObject(json);
+            int dataType = jsonObject.optInt(fieldName, -1);
+            return FIMManager.getInstance().getDataClass(dataType);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**

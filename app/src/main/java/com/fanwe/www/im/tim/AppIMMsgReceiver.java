@@ -2,7 +2,6 @@ package com.fanwe.www.im.tim;
 
 import com.fanwe.lib.im.FIMConversation;
 import com.fanwe.lib.im.FIMConversationType;
-import com.fanwe.lib.im.FIMManager;
 import com.fanwe.lib.im.FIMMsgData;
 import com.fanwe.lib.im.FIMMsgReceiver;
 import com.fanwe.lib.im.FIMMsgState;
@@ -170,8 +169,7 @@ public class AppIMMsgReceiver extends FIMMsgReceiver<TIMMessage>
         if (data != null)
         {
             String json = new String(data, DEFAULT_CHARSET);
-            int dataType = guessDataTypeFromJson(json);
-            Class clazz = FIMManager.getInstance().getDataClass(dataType);
+            Class clazz = guessDataClassFromJson(json);
             if (clazz != null)
             {
                 result = (FIMMsgData) new Gson().fromJson(json, clazz);
