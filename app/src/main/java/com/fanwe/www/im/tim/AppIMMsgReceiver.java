@@ -6,7 +6,6 @@ import com.fanwe.lib.im.FIMMsgData;
 import com.fanwe.lib.im.FIMMsgReceiver;
 import com.fanwe.lib.im.FIMMsgState;
 import com.fanwe.lib.im.FIMResultCallback;
-import com.google.gson.Gson;
 import com.tencent.TIMCustomElem;
 import com.tencent.TIMElem;
 import com.tencent.TIMElemType;
@@ -169,17 +168,13 @@ public class AppIMMsgReceiver extends FIMMsgReceiver<TIMMessage>
         if (data != null)
         {
             String json = new String(data, DEFAULT_CHARSET);
-            Class clazz = guessDataClassFromJson(json);
-            if (clazz != null)
-            {
-                result = (FIMMsgData) new Gson().fromJson(json, clazz);
-            }
+            int dataType = guessDataTypeFromJson(json);
         }
         return result;
     }
 
     @Override
-    protected void onFillData(FIMMsgData<TIMMessage> data) throws Exception
+    protected void onFillData(FIMMsgData<TIMMessage> data)
     {
 
     }

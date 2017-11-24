@@ -14,6 +14,7 @@ import org.json.JSONObject;
 public abstract class FIMMsgReceiver<M> implements FIMMsg
 {
     public static final String FIELD_NAME_GUESS_DATA_TYPE = "type";
+    public static final int EMPTY_DATA_TYPE = -1;
 
     private M mSDKMsg;
     private FIMMsgData mData;
@@ -60,32 +61,32 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
     }
 
     /**
-     * 从json串中猜测对应的数据Class对象
+     * 从json串中猜测对应的数据类型
      *
      * @param json
      * @return
      */
-    public Class guessDataClassFromJson(String json)
+    public int guessDataTypeFromJson(String json)
     {
         if (TextUtils.isEmpty(json))
         {
-            return null;
+            return EMPTY_DATA_TYPE;
         }
         final String fieldName = getFieldNameGuessDataType();
         if (TextUtils.isEmpty(fieldName))
         {
-            return null;
+            return EMPTY_DATA_TYPE;
         }
         try
         {
             JSONObject jsonObject = new JSONObject(json);
             int dataType = jsonObject.optInt(fieldName, -1);
-            return FIMManager.getInstance().getDataClass(dataType);
+            return dataType;
         } catch (Exception e)
         {
             e.printStackTrace();
         }
-        return null;
+        return EMPTY_DATA_TYPE;
     }
 
     /**

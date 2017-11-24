@@ -19,7 +19,6 @@ public class FIMManager
     private FIMHandler mIMHandler;
 
     private Map<String, FIMResultCallbackInfo> mMapResultCallback = new HashMap<>();
-    private Map<Integer, Class> mMapDataClass = new HashMap<>();
     private List<FIMMsgCallback> mListMsgCallback = new ArrayList<>();
 
     private FIMManager()
@@ -87,34 +86,6 @@ public class FIMManager
     public final void removeMsgCallback(FIMMsgCallback callback)
     {
         mListMsgCallback.remove(callback);
-    }
-
-    /**
-     * 添加数据Class
-     *
-     * @param dataType 数据类型
-     * @param clazz    对应的Class
-     * @param <D>
-     */
-    public final <D extends FIMMsgData> void addDataClass(int dataType, Class<D> clazz)
-    {
-        if (clazz == null)
-        {
-            return;
-        }
-        mMapDataClass.put(dataType, clazz);
-    }
-
-    /**
-     * 返回数据对应的Class
-     *
-     * @param dataType 数据类型
-     * @param <D>
-     * @return
-     */
-    public final <D extends FIMMsgData> Class<D> getDataClass(int dataType)
-    {
-        return mMapDataClass.get(dataType);
     }
 
     FIMMsgCallback mInternalMsgCallback = new FIMMsgCallback()
