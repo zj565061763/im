@@ -14,7 +14,6 @@ import org.json.JSONObject;
 public abstract class FIMMsgReceiver<M> implements FIMMsg
 {
     public static final String FIELD_NAME_GUESS_DATA_TYPE = "type";
-    public static final int EMPTY_DATA_TYPE = -1;
 
     private M mSDKMsg;
     private FIMMsgData mData;
@@ -98,25 +97,25 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
     {
         if (sdkMsg == null)
         {
-            return false;
+            throw new IllegalArgumentException("sdkMsg must not be null");
         }
         try
         {
             mSDKMsg = sdkMsg;
             mData = onParseSDKMsg();
-            if (mData != null)
-            {
-                onFillData(mData);
-                return true;
-            } else
-            {
-                return false;
-            }
         } catch (Exception e)
         {
             onError(e);
         }
-        return false;
+
+        if (mData != null)
+        {
+            onFillData(mData);
+            return true;
+        } else
+        {
+            return false;
+        }
     }
 
     @Override
@@ -159,9 +158,8 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
      * 填充解析好的数据
      *
      * @param data
-     * @throws Exception
      */
-    protected abstract void onFillData(FIMMsgData<M> data) throws Exception;
+    protected abstract void onFillData(FIMMsgData<M> data);
 
     /**
      * 解析异常回调
