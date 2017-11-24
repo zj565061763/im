@@ -1,7 +1,9 @@
 package com.fanwe.lib.im;
 
 /**
- * Created by zhengjun on 2017/11/23.
+ * IM处理类
+ *
+ * @param <M> 第三方IM消息类型
  */
 public interface FIMHandler<M>
 {

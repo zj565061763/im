@@ -1,7 +1,7 @@
 package com.fanwe.lib.im;
 
 /**
- * Created by zhengjun on 2017/11/22.
+ * IM消息
  */
 public interface FIMMsg
 {

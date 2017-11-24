@@ -1,7 +1,7 @@
 package com.fanwe.lib.im;
 
 /**
- * 消息接收回调
+ * IM消息接收回调
  */
 public interface FIMMsgCallback
 {

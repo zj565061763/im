@@ -9,7 +9,7 @@ import org.json.JSONObject;
 /**
  * 第三方IM消息接收处理类
  *
- * @param <M>
+ * @param <M>第三方IM消息类型
  */
 public abstract class FIMMsgReceiver<M> implements FIMMsg
 {

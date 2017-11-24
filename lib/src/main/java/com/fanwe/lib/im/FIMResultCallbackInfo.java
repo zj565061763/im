@@ -1,7 +1,7 @@
 package com.fanwe.lib.im;
 
 /**
- * Created by zhengjun on 2017/11/24.
+ * 保存callback信息
  */
 class FIMResultCallbackInfo
 {

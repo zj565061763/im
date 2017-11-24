@@ -1,9 +1,8 @@
 package com.fanwe.lib.im;
 
 /**
- * Created by zhengjun on 2017/11/22.
+ * 会话类型
  */
-
 public enum FIMConversationType
 {
     Invalid,
