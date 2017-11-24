@@ -1,6 +1,7 @@
 package com.fanwe.lib.im;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,12 +15,16 @@ import java.util.UUID;
  */
 public class FIMManager
 {
+    public static final String TAG = "FIM";
+
     private static FIMManager sInstance;
 
     private FIMHandler mIMHandler;
 
     private Map<String, FIMResultCallbackInfo> mMapResultCallback = new HashMap<>();
     private List<FIMMsgCallback> mListMsgCallback = new ArrayList<>();
+
+    private boolean mIsDebug;
 
     private FIMManager()
     {
@@ -40,12 +45,22 @@ public class FIMManager
         return sInstance;
     }
 
+    public void setDebug(boolean debug)
+    {
+        mIsDebug = debug;
+    }
+
+    public boolean isDebug()
+    {
+        return mIsDebug;
+    }
+
     /**
      * 设置IM处理对象
      *
      * @param handler
      */
-    public final void setIMHandler(FIMHandler handler)
+    public void setIMHandler(FIMHandler handler)
     {
         mIMHandler = handler;
     }
@@ -55,7 +70,7 @@ public class FIMManager
      *
      * @return
      */
-    public final FIMHandler getIMHandler()
+    public FIMHandler getIMHandler()
     {
         if (mIMHandler == null)
         {
@@ -69,13 +84,18 @@ public class FIMManager
      *
      * @param callback
      */
-    public final void addMsgCallback(FIMMsgCallback callback)
+    public synchronized void addMsgCallback(FIMMsgCallback callback)
     {
         if (callback == null || mListMsgCallback.contains(callback))
         {
             return;
         }
         mListMsgCallback.add(callback);
+
+        if (mIsDebug)
+        {
+            Log.i(TAG, "FIMMsgCallback add:" + callback);
+        }
     }
 
     /**
@@ -83,9 +103,15 @@ public class FIMManager
      *
      * @param callback
      */
-    public final void removeMsgCallback(FIMMsgCallback callback)
+    public synchronized void removeMsgCallback(FIMMsgCallback callback)
     {
-        mListMsgCallback.remove(callback);
+        if (mListMsgCallback.remove(callback))
+        {
+            if (mIsDebug)
+            {
+                Log.i(TAG, "FIMMsgCallback remove:" + callback);
+            }
+        }
     }
 
     FIMMsgCallback mInternalMsgCallback = new FIMMsgCallback()
@@ -100,17 +126,20 @@ public class FIMManager
         @Override
         public void onReceiveMsg(FIMMsg imMsg)
         {
-            Iterator<FIMMsgCallback> it = mListMsgCallback.iterator();
-            while (it.hasNext())
+            synchronized (FIMManager.this)
             {
-                FIMMsgCallback item = it.next();
+                Iterator<FIMMsgCallback> it = mListMsgCallback.iterator();
+                while (it.hasNext())
+                {
+                    FIMMsgCallback item = it.next();
 
-                if (item.ignoreMsg(imMsg))
-                {
-                    // 忽略当前消息
-                } else
-                {
-                    item.onReceiveMsg(imMsg);
+                    if (item.ignoreMsg(imMsg))
+                    {
+                        // 忽略当前消息
+                    } else
+                    {
+                        item.onReceiveMsg(imMsg);
+                    }
                 }
             }
         }
@@ -123,7 +152,7 @@ public class FIMManager
      * @param data 要发送的数据
      * @return
      */
-    public final FIMMsg sendMsgC2C(String peer, FIMMsgData data, FIMResultCallback<FIMMsg> callback)
+    public FIMMsg sendMsgC2C(String peer, FIMMsgData data, FIMResultCallback<FIMMsg> callback)
     {
         return getIMHandler().sendMsg(peer, data, FIMConversationType.C2C, generateCallbackId(callback));
     }
@@ -135,7 +164,7 @@ public class FIMManager
      * @param data 要发送的数据
      * @return
      */
-    public final FIMMsg sendMsgGroup(String peer, FIMMsgData data, FIMResultCallback<FIMMsg> callback)
+    public FIMMsg sendMsgGroup(String peer, FIMMsgData data, FIMResultCallback<FIMMsg> callback)
     {
         return getIMHandler().sendMsg(peer, data, FIMConversationType.Group, generateCallbackId(callback));
     }
@@ -146,7 +175,7 @@ public class FIMManager
      * @param callbackId
      * @return
      */
-    public final synchronized FIMResultCallback removeResultCallback(String callbackId)
+    public synchronized FIMResultCallback removeResultCallback(String callbackId)
     {
         FIMResultCallbackInfo info = mMapResultCallback.remove(callbackId);
         if (info != null)
@@ -164,7 +193,7 @@ public class FIMManager
      * @param tag
      * @return 移除的数量
      */
-    public final synchronized int removeResultCallbackByTag(String tag)
+    public synchronized int removeResultCallbackByTag(String tag)
     {
         int count = 0;
         if (TextUtils.isEmpty(tag))
