@@ -111,10 +111,11 @@ public class FIMManager
 
     FIMMsgCallback mInternalMsgCallback = new FIMMsgCallback()
     {
+
         @Override
-        public String filterMsgByPeer()
+        public boolean ignoreMsg(FIMMsg msg)
         {
-            return null;
+            return false;
         }
 
         @Override
@@ -125,16 +126,12 @@ public class FIMManager
             {
                 FIMMsgCallback item = it.next();
 
-                final String filterPeer = item.filterMsgByPeer();
-                if (TextUtils.isEmpty(filterPeer))
+                if (item.ignoreMsg(msg))
                 {
-                    item.onReceiveMsg(msg);
+                    // 忽略当前消息
                 } else
                 {
-                    if (filterPeer.equals(msg.getConversation().getPeer()))
-                    {
-                        item.onReceiveMsg(msg);
-                    }
+                    item.onReceiveMsg(msg);
                 }
             }
         }

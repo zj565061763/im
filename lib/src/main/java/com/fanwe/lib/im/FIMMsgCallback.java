@@ -1,11 +1,22 @@
 package com.fanwe.lib.im;
 
 /**
- * Created by zhengjun on 2017/11/22.
+ * 消息接收回调
  */
 public interface FIMMsgCallback
 {
-    String filterMsgByPeer();
+    /**
+     * 是否忽略当前消息
+     *
+     * @param msg
+     * @return true-忽略
+     */
+    boolean ignoreMsg(FIMMsg msg);
 
+    /**
+     * 消息回调方法
+     *
+     * @param msg
+     */
     void onReceiveMsg(FIMMsg msg);
 }

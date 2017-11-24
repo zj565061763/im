@@ -108,15 +108,12 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
         return false;
     }
 
-    /**
-     * 通知FIM接收新消息
-     */
+    @Override
     public final void notifyReceiveMsg()
     {
-        final FIMMsg msg = this;
         if (Looper.myLooper() == Looper.getMainLooper())
         {
-            FIMManager.getInstance().mInternalMsgCallback.onReceiveMsg(msg);
+            FIMManager.getInstance().mInternalMsgCallback.onReceiveMsg(this);
         } else
         {
             new Handler(Looper.getMainLooper()).post(new Runnable()
