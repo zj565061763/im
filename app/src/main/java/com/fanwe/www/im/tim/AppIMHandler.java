@@ -5,6 +5,7 @@ import com.fanwe.lib.im.FIMHandler;
 import com.fanwe.lib.im.FIMManager;
 import com.fanwe.lib.im.FIMMsg;
 import com.fanwe.lib.im.FIMMsgData;
+import com.fanwe.lib.im.FIMMsgReceiver;
 import com.fanwe.lib.im.FIMResultCallback;
 import com.tencent.TIMConversation;
 import com.tencent.TIMConversationType;
@@ -17,6 +18,13 @@ import com.tencent.TIMValueCallBack;
  */
 public class AppIMHandler implements FIMHandler<TIMMessage>
 {
+
+    @Override
+    public FIMMsgReceiver<TIMMessage> newMsgReceiver()
+    {
+        return new AppIMMsgReceiver();
+    }
+
     @Override
     public FIMMsg sendMsg(String peer, FIMMsgData<TIMMessage> data, FIMConversationType type, final String callbackId)
     {
@@ -34,9 +42,12 @@ public class AppIMHandler implements FIMHandler<TIMMessage>
         }
         try
         {
-            final TIMMessage message = data.parseToSDKMsg();
-            final AppIMMsgReceiver receiver = new AppIMMsgReceiver(message);
-            conversation.sendMessage(message, new TIMValueCallBack<TIMMessage>()
+            final TIMMessage timMessage = data.parseToSDKMsg();
+
+            final FIMMsgReceiver<TIMMessage> receiver = newMsgReceiver();
+            receiver.parse(timMessage);
+
+            conversation.sendMessage(timMessage, new TIMValueCallBack<TIMMessage>()
             {
                 @Override
                 public void onError(int code, String msg)
@@ -67,4 +78,5 @@ public class AppIMHandler implements FIMHandler<TIMMessage>
         }
         return null;
     }
+
 }

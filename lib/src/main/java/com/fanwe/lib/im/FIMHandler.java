@@ -7,14 +7,12 @@ package com.fanwe.lib.im;
  */
 public interface FIMHandler<M>
 {
-    FIMHandler DEFAULT = new FIMHandler()
-    {
-        @Override
-        public FIMMsg sendMsg(String peer, FIMMsgData data, FIMConversationType type, String callbackId)
-        {
-            return null;
-        }
-    };
+    /**
+     * 返回新创建的第三方IM消息接收对象
+     *
+     * @return
+     */
+    FIMMsgReceiver<M> newMsgReceiver();
 
     /**
      * 发送消息

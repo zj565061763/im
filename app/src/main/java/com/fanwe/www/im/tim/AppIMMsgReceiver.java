@@ -29,11 +29,6 @@ public class AppIMMsgReceiver extends FIMMsgReceiver<TIMMessage>
     private TIMSoundElem timSoundElem;
     private TIMTextElem timTextElem;
 
-    public AppIMMsgReceiver(TIMMessage sdkMsg)
-    {
-        super(sdkMsg);
-    }
-
     @Override
     public boolean isSelf()
     {

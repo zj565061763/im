@@ -70,11 +70,11 @@ public class FIMManager
      *
      * @return
      */
-    public FIMHandler getIMHandler()
+    private FIMHandler getIMHandler()
     {
         if (mIMHandler == null)
         {
-            mIMHandler = FIMHandler.DEFAULT;
+            throw new NullPointerException("you must set a FIMHandler to FIMManager before this");
         }
         return mIMHandler;
     }

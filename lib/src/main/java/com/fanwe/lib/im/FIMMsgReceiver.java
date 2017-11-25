@@ -19,11 +19,6 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
     private M mSDKMsg;
     private FIMMsgData mData;
 
-    public FIMMsgReceiver(M sdkMsg)
-    {
-        parse(sdkMsg);
-    }
-
     /**
      * 返回第三发IM消息对象
      *
@@ -94,7 +89,7 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
      *
      * @return
      */
-    public synchronized boolean parse(M sdkMsg)
+    public boolean parse(M sdkMsg)
     {
         if (sdkMsg == null)
         {
