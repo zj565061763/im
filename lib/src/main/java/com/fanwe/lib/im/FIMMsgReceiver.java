@@ -134,15 +134,6 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
     }
 
     /**
-     * 是否有需要下载的数据，true-需要<br>
-     * 如果需要下载数据，并且callback不为null，则开始下载数据
-     *
-     * @param callback
-     * @return
-     */
-    public abstract boolean isNeedDownloadData(FIMResultCallback callback);
-
-    /**
      * 将第三方的SDK消息解析为数据
      *
      * @return
@@ -156,6 +147,15 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
      * @param data
      */
     protected abstract void onFillData(FIMMsgData<M> data);
+
+    /**
+     * 是否有需要下载的数据，true-需要<br>
+     * 如果需要下载数据，并且callback不为null，则开始下载数据
+     *
+     * @param callback
+     * @return
+     */
+    public abstract boolean isNeedDownloadData(FIMResultCallback callback);
 
     /**
      * 解析异常回调
