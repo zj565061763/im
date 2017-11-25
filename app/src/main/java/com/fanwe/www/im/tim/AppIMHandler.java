@@ -40,43 +40,35 @@ public class AppIMHandler implements FIMHandler<TIMMessage>
             default:
                 break;
         }
-        try
+
+        final TIMMessage msg = data.parseToSDKMsg();
+        final FIMMsgReceiver<TIMMessage> receiver = newMsgReceiver();
+        receiver.parse(msg);
+        conversation.sendMessage(msg, new TIMValueCallBack<TIMMessage>()
         {
-            final TIMMessage timMessage = data.parseToSDKMsg();
-
-            final FIMMsgReceiver<TIMMessage> receiver = newMsgReceiver();
-            receiver.parse(timMessage);
-
-            conversation.sendMessage(timMessage, new TIMValueCallBack<TIMMessage>()
+            @Override
+            public void onError(int code, String msg)
             {
-                @Override
-                public void onError(int code, String msg)
+                FIMResultCallback callback = FIMManager.getInstance().removeResultCallback(callbackId);
+                if (callback != null)
                 {
-                    FIMResultCallback callback = FIMManager.getInstance().removeResultCallback(callbackId);
-                    if (callback != null)
-                    {
-                        callback.onError(code, msg);
-                    }
+                    callback.onError(code, msg);
                 }
+            }
 
-                @Override
-                public void onSuccess(TIMMessage timMessage)
+            @Override
+            public void onSuccess(TIMMessage timMessage)
+            {
+                FIMResultCallback callback = FIMManager.getInstance().removeResultCallback(callbackId);
+                if (callback != null)
                 {
-                    FIMResultCallback callback = FIMManager.getInstance().removeResultCallback(callbackId);
-                    if (callback != null)
-                    {
-                        receiver.parse(timMessage);
-                        callback.onSuccess(receiver);
-                    }
+                    receiver.parse(timMessage);
+                    callback.onSuccess(receiver);
                 }
-            });
+            }
+        });
 
-            return receiver;
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return null;
+        return receiver;
     }
 
 }
