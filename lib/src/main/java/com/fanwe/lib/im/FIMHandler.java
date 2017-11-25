@@ -23,5 +23,5 @@ public interface FIMHandler<M>
      * @param callbackId 回调对象id
      * @return
      */
-    FIMMsg sendMsg(String peer, FIMMsgData<M> data, FIMConversationType type, final String callbackId);
+    FIMMsg sendMsg(String peer, FIMMsgData<M> data, FIMConversationType type, String callbackId);
 }
