@@ -146,6 +146,16 @@ public class FIMManager
     };
 
     /**
+     * 返回新创建的第三方IM消息接收对象
+     *
+     * @return
+     */
+    public FIMMsgReceiver newMsgReceiver()
+    {
+        return getIMHandler().newMsgReceiver();
+    }
+
+    /**
      * 发送C2C消息
      *
      * @param peer 对方id
