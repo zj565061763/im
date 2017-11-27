@@ -6,6 +6,9 @@ import android.text.TextUtils;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+
 /**
  * 第三方IM消息接收处理类
  *
@@ -16,8 +19,19 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
     public static final String FIELD_NAME_GUESS_DATA_TYPE = "type";
     public static final int EMPTY_DATA_TYPE = -1;
 
+    private Class<M> mSDKMsgClass;
     private M mSDKMsg;
     private FIMMsgData mData;
+
+    public FIMMsgReceiver()
+    {
+        Type[] arrType = getType(getClass());
+        if (arrType != null && arrType.length == 1)
+        {
+            Type type = arrType[0];
+            mSDKMsgClass = (Class<M>) type;
+        }
+    }
 
     /**
      * 返回第三发IM消息对象
@@ -93,7 +107,11 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
     {
         if (sdkMsg == null)
         {
-            throw new IllegalArgumentException("sdkMsg must not be null");
+            throw new NullPointerException("sdkMsg must not be null");
+        }
+        if (!mSDKMsgClass.isInstance(sdkMsg))
+        {
+            throw new IllegalArgumentException("sdkMsg must be instance of " + mSDKMsgClass);
         }
         try
         {
@@ -112,6 +130,19 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
         {
             return false;
         }
+    }
+
+    private static Type[] getType(Class clazz)
+    {
+        Type[] types = null;
+        if (clazz != null)
+        {
+            Type type = clazz.getGenericSuperclass();
+            ParameterizedType parameterizedType = (ParameterizedType) type;
+            types = parameterizedType.getActualTypeArguments();
+        }
+
+        return types;
     }
 
     @Override
