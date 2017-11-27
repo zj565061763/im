@@ -1,4 +1,6 @@
-package com.fanwe.lib.im;
+package com.fanwe.lib.im.callback;
+
+import com.fanwe.lib.im.FIMMsg;
 
 /**
  * IM消息接收回调

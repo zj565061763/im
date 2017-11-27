@@ -4,6 +4,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 
+import com.fanwe.lib.im.callback.FIMResultCallback;
+
 import org.json.JSONObject;
 
 import java.lang.reflect.ParameterizedType;

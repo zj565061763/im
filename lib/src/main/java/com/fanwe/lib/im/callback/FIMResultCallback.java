@@ -1,4 +1,4 @@
-package com.fanwe.lib.im;
+package com.fanwe.lib.im.callback;
 
 /**
  * IM通用的结果回调

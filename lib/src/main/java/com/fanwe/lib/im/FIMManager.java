@@ -3,6 +3,9 @@ package com.fanwe.lib.im;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.fanwe.lib.im.callback.FIMMsgCallback;
+import com.fanwe.lib.im.callback.FIMResultCallback;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;

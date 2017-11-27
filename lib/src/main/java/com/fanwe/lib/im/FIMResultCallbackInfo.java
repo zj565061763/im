@@ -1,5 +1,7 @@
 package com.fanwe.lib.im;
 
+import com.fanwe.lib.im.callback.FIMResultCallback;
+
 /**
  * 保存callback信息
  */

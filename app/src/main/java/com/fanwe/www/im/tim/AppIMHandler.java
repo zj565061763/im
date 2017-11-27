@@ -6,7 +6,7 @@ import com.fanwe.lib.im.FIMManager;
 import com.fanwe.lib.im.FIMMsg;
 import com.fanwe.lib.im.FIMMsgData;
 import com.fanwe.lib.im.FIMMsgReceiver;
-import com.fanwe.lib.im.FIMResultCallback;
+import com.fanwe.lib.im.callback.FIMResultCallback;
 import com.tencent.TIMConversation;
 import com.tencent.TIMConversationType;
 import com.tencent.TIMManager;
