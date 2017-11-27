@@ -17,7 +17,7 @@ public interface FIMMsg
      *
      * @return
      */
-    <D extends FIMMsgData> D getData();
+    FIMMsgData getData();
 
     /**
      * 消息是否是自己发送的
