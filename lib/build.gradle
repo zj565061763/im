@@ -9,7 +9,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 20171127
-        versionName "1.0.8"
+        versionName "1.0.9"
 
     }
     buildTypes {
