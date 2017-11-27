@@ -56,9 +56,9 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
     }
 
     @Override
-    public FIMMsgData getData()
+    public <D extends FIMMsgData> D getData()
     {
-        return mData;
+        return (D) mData;
     }
 
     /**
