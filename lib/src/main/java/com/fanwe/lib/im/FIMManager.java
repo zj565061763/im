@@ -97,7 +97,7 @@ public class FIMManager
 
         if (mIsDebug)
         {
-            Log.i(TAG, "FIMMsgCallback add:" + callback);
+            Log.i(TAG, "FIMMsgCallback add size " + mListMsgCallback.size() + " " + callback);
         }
     }
 
@@ -112,7 +112,7 @@ public class FIMManager
         {
             if (mIsDebug)
             {
-                Log.i(TAG, "FIMMsgCallback remove:" + callback);
+                Log.i(TAG, "FIMMsgCallback remove size " + mListMsgCallback.size() + " " + callback);
             }
         }
     }
