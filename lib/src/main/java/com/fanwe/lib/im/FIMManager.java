@@ -112,7 +112,7 @@ public class FIMManager
         {
             if (mIsDebug)
             {
-                Log.i(TAG, "FIMMsgCallback remove size " + mListMsgCallback.size() + " " + callback);
+                Log.e(TAG, "FIMMsgCallback remove size " + mListMsgCallback.size() + " " + callback);
             }
         }
     }
