@@ -14,15 +14,15 @@ public abstract class FIMHandler<M>
      *
      * @return
      */
-    protected abstract FIMMsgReceiver<M> newMsgReceiver();
+    public abstract FIMMsgReceiver<M> newMsgReceiver();
 
     /**
      * 移除并返回结果回调
      *
-     * @param callbackId 回调对应的id
+     * @param callbackId 回调id
      * @return
      */
-    protected final FIMResultCallback removeResultCallback(String callbackId)
+    public final FIMResultCallback removeResultCallback(String callbackId)
     {
         return FIMManager.getInstance().removeResultCallback(callbackId);
     }
@@ -33,8 +33,24 @@ public abstract class FIMHandler<M>
      * @param peer       对方id
      * @param data       消息数据
      * @param type       消息类型
-     * @param callbackId 回调对象id
+     * @param callbackId 回调id
      * @return
      */
-    protected abstract FIMMsg sendMsg(String peer, FIMMsgData<M> data, FIMConversationType type, String callbackId);
+    public abstract FIMMsg sendMsg(String peer, FIMMsgData<M> data, FIMConversationType type, String callbackId);
+
+    /**
+     * 加入群组
+     *
+     * @param groupId    群组id
+     * @param callbackId 回调id
+     */
+    public abstract void joinGroup(String groupId, String callbackId);
+
+    /**
+     * 退出群组
+     *
+     * @param groupId    群组id
+     * @param callbackId 回调id
+     */
+    public abstract void quitGroup(String groupId, String callbackId);
 }

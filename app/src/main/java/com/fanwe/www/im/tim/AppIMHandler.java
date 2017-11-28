@@ -70,4 +70,15 @@ public class AppIMHandler extends FIMHandler<TIMMessage>
         return receiver;
     }
 
+    @Override
+    public void joinGroup(String groupId, String callbackId)
+    {
+
+    }
+
+    @Override
+    public void quitGroup(String groupId, String callbackId)
+    {
+
+    }
 }

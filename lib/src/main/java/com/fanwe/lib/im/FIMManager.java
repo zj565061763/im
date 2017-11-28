@@ -183,6 +183,28 @@ public class FIMManager
     }
 
     /**
+     * 加入群组
+     *
+     * @param groupId  群组id
+     * @param callback
+     */
+    public void joinGroup(String groupId, FIMResultCallback callback)
+    {
+        getIMHandler().joinGroup(groupId, generateCallbackId(callback));
+    }
+
+    /**
+     * 退出群组
+     *
+     * @param groupId  群组id
+     * @param callback
+     */
+    public void quitGroup(String groupId, FIMResultCallback callback)
+    {
+        getIMHandler().quitGroup(groupId, generateCallbackId(callback));
+    }
+
+    /**
      * 移除并返回结果回调
      *
      * @param callbackId 回调对应的id
