@@ -185,10 +185,10 @@ public class FIMManager
     /**
      * 移除并返回结果回调
      *
-     * @param callbackId
+     * @param callbackId 回调对应的id
      * @return
      */
-    public synchronized FIMResultCallback removeResultCallback(String callbackId)
+    synchronized FIMResultCallback removeResultCallback(String callbackId)
     {
         FIMResultCallbackInfo info = mMapResultCallback.remove(callbackId);
         if (info != null)
