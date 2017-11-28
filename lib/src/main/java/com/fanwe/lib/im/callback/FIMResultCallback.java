@@ -35,7 +35,7 @@ public abstract class FIMResultCallback<T>
      * 失败回调
      *
      * @param code 错误码
-     * @param msg  失败描述
+     * @param desc 失败描述
      */
-    public abstract void onError(int code, String msg);
+    public abstract void onError(int code, String desc);
 }
