@@ -2,7 +2,6 @@ package com.fanwe.www.im.tim;
 
 import com.fanwe.lib.im.FIMConversationType;
 import com.fanwe.lib.im.FIMHandler;
-import com.fanwe.lib.im.FIMManager;
 import com.fanwe.lib.im.FIMMsg;
 import com.fanwe.lib.im.FIMMsgData;
 import com.fanwe.lib.im.FIMMsgReceiver;
@@ -16,7 +15,7 @@ import com.tencent.TIMValueCallBack;
 /**
  * Created by Administrator on 2017/11/23.
  */
-public class AppIMHandler implements FIMHandler<TIMMessage>
+public class AppIMHandler extends FIMHandler<TIMMessage>
 {
 
     @Override
@@ -49,7 +48,7 @@ public class AppIMHandler implements FIMHandler<TIMMessage>
             @Override
             public void onError(int code, String msg)
             {
-                FIMResultCallback callback = FIMManager.getInstance().removeResultCallback(callbackId);
+                FIMResultCallback callback = removeResultCallback(callbackId);
                 if (callback != null)
                 {
                     callback.onError(code, msg);
@@ -59,7 +58,7 @@ public class AppIMHandler implements FIMHandler<TIMMessage>
             @Override
             public void onSuccess(TIMMessage timMessage)
             {
-                FIMResultCallback callback = FIMManager.getInstance().removeResultCallback(callbackId);
+                FIMResultCallback callback = removeResultCallback(callbackId);
                 if (callback != null)
                 {
                     receiver.parse(timMessage);
