@@ -63,11 +63,21 @@ public class FIMManager
         return sInstance;
     }
 
+    /**
+     * 设置是否调试模式
+     *
+     * @param debug
+     */
     public void setDebug(boolean debug)
     {
         mIsDebug = debug;
     }
 
+    /**
+     * 是否调试模式
+     *
+     * @return
+     */
     public boolean isDebug()
     {
         return mIsDebug;
