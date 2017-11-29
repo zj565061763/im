@@ -25,10 +25,10 @@ public class AppIMHandler extends FIMHandler<TIMMessage>
     }
 
     @Override
-    public FIMMsg sendMsg(String peer, FIMMsgData<TIMMessage> data, FIMConversationType type, final String callbackId)
+    public FIMMsg sendMsg(String peer, FIMMsgData<TIMMessage> msgData, FIMConversationType conversationType, final String callbackId)
     {
         TIMConversation conversation = null;
-        switch (type)
+        switch (conversationType)
         {
             case C2C:
                 conversation = TIMManager.getInstance().getConversation(TIMConversationType.C2C, peer);
@@ -40,7 +40,7 @@ public class AppIMHandler extends FIMHandler<TIMMessage>
                 break;
         }
 
-        final TIMMessage msg = data.parseToSDKMsg();
+        final TIMMessage msg = msgData.parseToSDKMsg();
         final FIMMsgReceiver<TIMMessage> receiver = newMsgReceiver();
         receiver.parse(msg);
         conversation.sendMessage(msg, new TIMValueCallBack<TIMMessage>()

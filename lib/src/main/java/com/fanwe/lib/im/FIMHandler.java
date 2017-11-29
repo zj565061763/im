@@ -30,13 +30,13 @@ public abstract class FIMHandler<M>
     /**
      * 发送消息
      *
-     * @param peer       对方id
-     * @param data       消息数据
-     * @param type       消息类型
-     * @param callbackId 回调id
+     * @param peer             对方id
+     * @param msgData          消息数据
+     * @param conversationType 消息类型
+     * @param callbackId       回调id
      * @return
      */
-    public abstract FIMMsg sendMsg(String peer, FIMMsgData<M> data, FIMConversationType type, String callbackId);
+    public abstract FIMMsg sendMsg(String peer, FIMMsgData<M> msgData, FIMConversationType conversationType, String callbackId);
 
     /**
      * 加入群组
