@@ -270,7 +270,7 @@ public class FIMManager
     /**
      * 移除过期的回调对象
      *
-     * @param expireTime 过期时间
+     * @param expireTime 过期时间（毫秒）
      */
     public synchronized void removeExpiredResultCallback(long expireTime)
     {
