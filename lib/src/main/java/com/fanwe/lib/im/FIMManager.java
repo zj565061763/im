@@ -231,7 +231,7 @@ public class FIMManager
     public synchronized int removeResultCallbackByTag(String tag)
     {
         int count = 0;
-        if (TextUtils.isEmpty(tag))
+        if (TextUtils.isEmpty(tag) || mMapResultCallback.isEmpty())
         {
             return count;
         }
@@ -241,6 +241,7 @@ public class FIMManager
         {
             Map.Entry<String, FIMResultCallbackInfo> item = it.next();
             FIMResultCallbackInfo info = item.getValue();
+
             if (tag.equals(info.tag))
             {
                 it.remove();
@@ -249,6 +250,36 @@ public class FIMManager
         }
 
         return count;
+    }
+
+    /**
+     * 移除过期的回调对象
+     *
+     * @param expireTime 过期时间
+     */
+    public synchronized void removeExpiredResultCallback(long expireTime)
+    {
+        if (expireTime <= 0 || mMapResultCallback.isEmpty())
+        {
+            return;
+        }
+
+        final long currentTime = System.currentTimeMillis();
+        Iterator<Map.Entry<String, FIMResultCallbackInfo>> it = mMapResultCallback.entrySet().iterator();
+        while (it.hasNext())
+        {
+            Map.Entry<String, FIMResultCallbackInfo> item = it.next();
+            FIMResultCallbackInfo info = item.getValue();
+
+            if (currentTime - info.createTime >= expireTime)
+            {
+                it.remove();
+                if (mIsDebug)
+                {
+                    Log.e(TAG, "removeExpiredResultCallback:" + info.callback);
+                }
+            }
+        }
     }
 
     /**

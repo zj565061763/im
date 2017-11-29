@@ -9,6 +9,7 @@ class FIMResultCallbackInfo
 {
     public FIMResultCallback callback;
     public String tag;
+    public long createTime = System.currentTimeMillis();
 
     public FIMResultCallbackInfo(FIMResultCallback callback, String tag)
     {
