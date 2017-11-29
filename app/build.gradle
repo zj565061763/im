@@ -8,6 +8,10 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+
+        ndk {
+            abiFilter 'armeabi'
+        }
     }
     buildTypes {
         release {
@@ -20,7 +24,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:26.1.0'
-    compile(name: 'libraryIMTencent-release', ext: 'aar')
+    compile 'com.github.zj565061763:imsdk-tencent:2.5.7.v1'
     compile 'com.google.code.gson:gson:2.8.2'
     implementation project(':lib')
 }
