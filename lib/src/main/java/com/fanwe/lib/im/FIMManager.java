@@ -21,12 +21,12 @@ import android.util.Log;
 import com.fanwe.lib.im.callback.FIMMsgCallback;
 import com.fanwe.lib.im.callback.FIMResultCallback;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * IM管理基类
@@ -40,7 +40,7 @@ public class FIMManager
     private FIMHandler mIMHandler;
 
     private final Map<String, FIMResultCallbackInfo> mMapResultCallback = new HashMap<>();
-    private final List<FIMMsgCallback> mListMsgCallback = new CopyOnWriteArrayList<>();
+    private final List<FIMMsgCallback> mListMsgCallback = new ArrayList<>();
 
     private boolean mIsDebug;
 
@@ -122,7 +122,7 @@ public class FIMManager
 
         if (mIsDebug)
         {
-            Log.i(TAG, "FIMMsgCallback add size " + mListMsgCallback.size() + " " + callback);
+            Log.i(TAG, "FIMMsgCallback add size " + mListMsgCallback.size() + " " + callback + " " + Thread.currentThread().getName());
         }
     }
 
@@ -137,7 +137,7 @@ public class FIMManager
         {
             if (mIsDebug)
             {
-                Log.e(TAG, "FIMMsgCallback remove size " + mListMsgCallback.size() + " " + callback);
+                Log.e(TAG, "FIMMsgCallback remove size " + mListMsgCallback.size() + " " + callback + " " + Thread.currentThread().getName());
             }
         }
     }
