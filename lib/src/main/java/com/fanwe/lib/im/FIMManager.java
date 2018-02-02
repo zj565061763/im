@@ -144,7 +144,6 @@ public class FIMManager
 
     FIMMsgCallback mInternalMsgCallback = new FIMMsgCallback()
     {
-
         @Override
         public boolean ignoreMsg(FIMMsg fimMsg)
         {
@@ -156,11 +155,8 @@ public class FIMManager
         {
             synchronized (FIMManager.this)
             {
-                Iterator<FIMMsgCallback> it = mListMsgCallback.iterator();
-                while (it.hasNext())
+                for (FIMMsgCallback item : mListMsgCallback)
                 {
-                    FIMMsgCallback item = it.next();
-
                     if (item.ignoreMsg(fimMsg))
                     {
                         // 忽略当前消息
