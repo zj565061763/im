@@ -35,9 +35,6 @@ import java.lang.reflect.Type;
  */
 public abstract class FIMMsgReceiver<M> implements FIMMsg
 {
-    public static final String FIELD_NAME_GUESS_DATA_TYPE = "type";
-    public static final int EMPTY_DATA_TYPE = -1;
-
     private Class<M> mSDKMsgClass;
     private M mSDKMsg;
     private FIMMsgData mData;
@@ -83,35 +80,34 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
      *
      * @return
      */
-    protected String getFieldNameGuessDataType()
+    protected String getJsonFieldNameForDataType()
     {
-        return FIELD_NAME_GUESS_DATA_TYPE;
+        return "type";
     }
 
     /**
      * 从json串中猜测对应的数据类型
      *
      * @param json
-     * @return
+     * @return 返回猜测的数据类型，-1表示猜测失败
      */
     protected int guessDataTypeFromJson(String json)
     {
         if (!TextUtils.isEmpty(json))
         {
-            final String fieldName = getFieldNameGuessDataType();
-            if (!TextUtils.isEmpty(fieldName))
+            final String jsonFieldName = getJsonFieldNameForDataType();
+            if (!TextUtils.isEmpty(jsonFieldName))
             {
                 try
                 {
-                    JSONObject jsonObject = new JSONObject(json);
-                    return jsonObject.getInt(fieldName);
+                    return new JSONObject(json).getInt(jsonFieldName);
                 } catch (Exception e)
                 {
                     e.printStackTrace();
                 }
             }
         }
-        return EMPTY_DATA_TYPE;
+        return -1;
     }
 
     /**
