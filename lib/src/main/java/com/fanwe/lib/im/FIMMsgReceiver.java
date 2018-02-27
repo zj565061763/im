@@ -44,11 +44,11 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
 
     public FIMMsgReceiver()
     {
-        Type[] arrType = getType(getClass());
-        if (arrType != null && arrType.length == 1)
+        ParameterizedType type = (ParameterizedType) getClass().getGenericSuperclass();
+        Type[] types = type.getActualTypeArguments();
+        if (types != null && types.length == 1)
         {
-            Type type = arrType[0];
-            mSDKMsgClass = (Class<M>) type;
+            mSDKMsgClass = (Class<M>) types[0];
         }
     }
 
@@ -96,23 +96,20 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
      */
     protected int guessDataTypeFromJson(String json)
     {
-        if (TextUtils.isEmpty(json))
+        if (!TextUtils.isEmpty(json))
         {
-            return EMPTY_DATA_TYPE;
-        }
-        final String fieldName = getFieldNameGuessDataType();
-        if (TextUtils.isEmpty(fieldName))
-        {
-            return EMPTY_DATA_TYPE;
-        }
-        try
-        {
-            JSONObject jsonObject = new JSONObject(json);
-            int dataType = jsonObject.optInt(fieldName, -1);
-            return dataType;
-        } catch (Exception e)
-        {
-            e.printStackTrace();
+            final String fieldName = getFieldNameGuessDataType();
+            if (!TextUtils.isEmpty(fieldName))
+            {
+                try
+                {
+                    JSONObject jsonObject = new JSONObject(json);
+                    return jsonObject.getInt(fieldName);
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
         }
         return EMPTY_DATA_TYPE;
     }
@@ -149,19 +146,6 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
         {
             return false;
         }
-    }
-
-    private static Type[] getType(Class clazz)
-    {
-        Type[] types = null;
-        if (clazz != null)
-        {
-            Type type = clazz.getGenericSuperclass();
-            ParameterizedType parameterizedType = (ParameterizedType) type;
-            types = parameterizedType.getActualTypeArguments();
-        }
-
-        return types;
     }
 
     @Override
