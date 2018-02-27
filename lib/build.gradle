@@ -8,8 +8,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 20180202
-        versionName "1.0.17"
+        versionCode 20180227
+        versionName "1.0.18"
 
     }
     buildTypes {
@@ -21,8 +21,6 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-
 }
 
 // 指定编码
