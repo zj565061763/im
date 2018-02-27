@@ -48,7 +48,7 @@ public class AppIMHandler extends FIMHandler<TIMMessage>
             @Override
             public void onError(int code, String msg)
             {
-                FIMResultCallback callback = removeResultCallback(callbackId);
+                FIMResultCallback callback = removeCallbackById(callbackId);
                 if (callback != null)
                 {
                     callback.onError(code, msg);
@@ -58,7 +58,7 @@ public class AppIMHandler extends FIMHandler<TIMMessage>
             @Override
             public void onSuccess(TIMMessage timMessage)
             {
-                FIMResultCallback callback = removeResultCallback(callbackId);
+                FIMResultCallback callback = removeCallbackById(callbackId);
                 if (callback != null)
                 {
                     receiver.parse(timMessage);

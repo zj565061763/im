@@ -167,7 +167,7 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
     {
         if (Looper.myLooper() == Looper.getMainLooper())
         {
-            FIMManager.getInstance().mInternalMsgCallback.onReceiveMsg(this);
+            FIMManager.getInstance().notifyReceiveMsg(this);
         } else
         {
             new Handler(Looper.getMainLooper()).post(new Runnable()

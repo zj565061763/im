@@ -37,9 +37,9 @@ public abstract class FIMHandler<M>
      * @param callbackId 回调id
      * @return
      */
-    public final FIMResultCallback removeResultCallback(String callbackId)
+    public final FIMResultCallback removeCallbackById(String callbackId)
     {
-        return FIMManager.getInstance().removeResultCallback(callbackId);
+        return FIMManager.getInstance().removeCallbackById(callbackId);
     }
 
     /**

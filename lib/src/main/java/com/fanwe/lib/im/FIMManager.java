@@ -39,7 +39,7 @@ public class FIMManager
 
     private FIMHandler mIMHandler;
 
-    private final Map<String, FIMResultCallbackInfo> mMapResultCallback = new HashMap<>();
+    private final Map<String, CallbackInfo> mMapCallback = new HashMap<>();
     private final List<FIMMsgCallback> mListMsgCallback = new CopyOnWriteArrayList<>();
 
     private boolean mIsDebug;
@@ -142,32 +142,22 @@ public class FIMManager
         }
     }
 
-    FIMMsgCallback mInternalMsgCallback = new FIMMsgCallback()
+    void notifyReceiveMsg(FIMMsg fimMsg)
     {
-        @Override
-        public boolean ignoreMsg(FIMMsg fimMsg)
+        synchronized (FIMManager.this)
         {
-            return false;
-        }
-
-        @Override
-        public void onReceiveMsg(FIMMsg fimMsg)
-        {
-            synchronized (FIMManager.this)
+            for (FIMMsgCallback item : mListMsgCallback)
             {
-                for (FIMMsgCallback item : mListMsgCallback)
+                if (item.ignoreMsg(fimMsg))
                 {
-                    if (item.ignoreMsg(fimMsg))
-                    {
-                        // 忽略当前消息
-                    } else
-                    {
-                        item.onReceiveMsg(fimMsg);
-                    }
+                    // 忽略当前消息
+                } else
+                {
+                    item.onReceiveMsg(fimMsg);
                 }
             }
         }
-    };
+    }
 
     /**
      * 返回新创建的第三方IM消息接收对象
@@ -231,9 +221,9 @@ public class FIMManager
      * @param callbackId 回调对应的id
      * @return
      */
-    synchronized FIMResultCallback removeResultCallback(String callbackId)
+    synchronized FIMResultCallback removeCallbackById(String callbackId)
     {
-        FIMResultCallbackInfo info = mMapResultCallback.remove(callbackId);
+        CallbackInfo info = mMapCallback.remove(callbackId);
         if (info != null)
         {
             return info.callback;
@@ -249,19 +239,19 @@ public class FIMManager
      * @param tag
      * @return 移除的数量
      */
-    public synchronized int removeResultCallbackByTag(String tag)
+    public synchronized int removeCallbackByTag(String tag)
     {
         int count = 0;
-        if (TextUtils.isEmpty(tag) || mMapResultCallback.isEmpty())
+        if (TextUtils.isEmpty(tag) || mMapCallback.isEmpty())
         {
             return count;
         }
 
-        Iterator<Map.Entry<String, FIMResultCallbackInfo>> it = mMapResultCallback.entrySet().iterator();
+        Iterator<Map.Entry<String, CallbackInfo>> it = mMapCallback.entrySet().iterator();
         while (it.hasNext())
         {
-            Map.Entry<String, FIMResultCallbackInfo> item = it.next();
-            FIMResultCallbackInfo info = item.getValue();
+            Map.Entry<String, CallbackInfo> item = it.next();
+            CallbackInfo info = item.getValue();
 
             if (tag.equals(info.tag))
             {
@@ -274,30 +264,30 @@ public class FIMManager
     }
 
     /**
-     * 移除过期的回调对象
+     * 移除超过指定时间长度的回调对象
      *
-     * @param expireTime 过期时间（毫秒）
+     * @param duration 时间长度（毫秒）
      */
-    public synchronized void removeExpiredResultCallback(long expireTime)
+    public synchronized void removeCallbackByDuration(final long duration)
     {
-        if (expireTime <= 0 || mMapResultCallback.isEmpty())
+        if (duration <= 0 || mMapCallback.isEmpty())
         {
             return;
         }
 
         final long currentTime = System.currentTimeMillis();
-        Iterator<Map.Entry<String, FIMResultCallbackInfo>> it = mMapResultCallback.entrySet().iterator();
+        Iterator<Map.Entry<String, CallbackInfo>> it = mMapCallback.entrySet().iterator();
         while (it.hasNext())
         {
-            Map.Entry<String, FIMResultCallbackInfo> item = it.next();
-            FIMResultCallbackInfo info = item.getValue();
+            Map.Entry<String, CallbackInfo> item = it.next();
+            CallbackInfo info = item.getValue();
 
-            if (currentTime - info.createTime >= expireTime)
+            if (currentTime - info.createTime > duration)
             {
                 it.remove();
                 if (mIsDebug)
                 {
-                    Log.e(TAG, "removeExpiredResultCallback:" + info.callback);
+                    Log.e(TAG, "removeCallbackByDuration:" + info.callback);
                 }
             }
         }
@@ -317,9 +307,25 @@ public class FIMManager
         }
 
         final String callbackId = String.valueOf(UUID.randomUUID());
-        FIMResultCallbackInfo info = new FIMResultCallbackInfo(callback, callback.getTag());
+        CallbackInfo info = new CallbackInfo(callback, callback.getTag());
 
-        mMapResultCallback.put(callbackId, info);
+        mMapCallback.put(callbackId, info);
         return callbackId;
+    }
+
+    /**
+     * 保存callback信息
+     */
+    private static final class CallbackInfo
+    {
+        public FIMResultCallback callback;
+        public String tag;
+        public long createTime = System.currentTimeMillis();
+
+        public CallbackInfo(FIMResultCallback callback, String tag)
+        {
+            this.callback = callback;
+            this.tag = tag;
+        }
     }
 }
