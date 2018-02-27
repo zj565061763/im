@@ -13,33 +13,66 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.fanwe.lib.im;
+package com.fanwe.lib.im.msg;
+
+import com.fanwe.lib.im.conversation.FIMConversation;
 
 /**
- * IM消息数据
- *
- * @param <M> 第三方IM消息类型
+ * IM消息
  */
-public interface FIMMsgData<M>
+public interface FIMMsg
 {
     /**
      * 返回数据类型
      *
      * @return
      */
-    int getType();
+    int getDataType();
 
     /**
-     * 将当前数据解析为第三方SDK的消息
+     * 返回自定义数据对象
      *
      * @return
      */
-    M parseToSDKMsg();
+    FIMMsgData getData();
 
     /**
-     * 将数据解析为FIM消息
+     * 消息是否是自己发送的
      *
      * @return
      */
-    FIMMsg parseToMsg();
+    boolean isSelf();
+
+    /**
+     * 返回消息的时间戳（毫秒）
+     *
+     * @return
+     */
+    long getTimestamp();
+
+    /**
+     * 返回消息的状态
+     *
+     * @return
+     */
+    FIMMsgState getState();
+
+    /**
+     * 返回消息对应的会话对象
+     *
+     * @return
+     */
+    FIMConversation getConversation();
+
+    /**
+     * 移除消息
+     *
+     * @return
+     */
+    boolean remove();
+
+    /**
+     * 把当前消息通知给消息接收回调
+     */
+    void notifyReceiveMsg();
 }

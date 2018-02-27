@@ -13,64 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.fanwe.lib.im;
+package com.fanwe.lib.im.conversation;
 
 /**
- * IM消息
+ * IM会话
  */
-public interface FIMMsg
+public interface FIMConversation
 {
     /**
-     * 返回数据类型
+     * 会话id
      *
      * @return
      */
-    int getDataType();
+    String getPeer();
 
     /**
-     * 返回自定义数据对象
+     * 会话类型
      *
      * @return
      */
-    FIMMsgData getData();
+    FIMConversationType getType();
 
     /**
-     * 消息是否是自己发送的
+     * 该会话的未读数量
      *
      * @return
      */
-    boolean isSelf();
-
-    /**
-     * 返回消息的时间戳（毫秒）
-     *
-     * @return
-     */
-    long getTimestamp();
-
-    /**
-     * 返回消息的状态
-     *
-     * @return
-     */
-    FIMMsgState getState();
-
-    /**
-     * 返回消息对应的会话对象
-     *
-     * @return
-     */
-    FIMConversation getConversation();
-
-    /**
-     * 移除消息
-     *
-     * @return
-     */
-    boolean remove();
-
-    /**
-     * 把当前消息通知给消息接收回调
-     */
-    void notifyReceiveMsg();
+    long getUnreadMessageNum();
 }

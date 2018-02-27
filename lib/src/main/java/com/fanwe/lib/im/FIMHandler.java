@@ -16,6 +16,9 @@
 package com.fanwe.lib.im;
 
 import com.fanwe.lib.im.callback.FIMResultCallback;
+import com.fanwe.lib.im.conversation.FIMConversationType;
+import com.fanwe.lib.im.msg.FIMMsg;
+import com.fanwe.lib.im.msg.FIMMsgData;
 
 /**
  * IM处理类

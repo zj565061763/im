@@ -20,6 +20,8 @@ import android.os.Looper;
 import android.text.TextUtils;
 
 import com.fanwe.lib.im.callback.FIMResultCallback;
+import com.fanwe.lib.im.msg.FIMMsg;
+import com.fanwe.lib.im.msg.FIMMsgData;
 
 import org.json.JSONObject;
 

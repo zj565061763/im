@@ -1,9 +1,9 @@
 package com.fanwe.www.im.tim;
 
-import com.fanwe.lib.im.FIMConversationType;
+import com.fanwe.lib.im.conversation.FIMConversationType;
 import com.fanwe.lib.im.FIMHandler;
-import com.fanwe.lib.im.FIMMsg;
-import com.fanwe.lib.im.FIMMsgData;
+import com.fanwe.lib.im.msg.FIMMsg;
+import com.fanwe.lib.im.msg.FIMMsgData;
 import com.fanwe.lib.im.FIMMsgReceiver;
 import com.fanwe.lib.im.callback.FIMResultCallback;
 import com.tencent.TIMConversation;

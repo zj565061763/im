@@ -13,31 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.fanwe.lib.im;
+package com.fanwe.lib.im.conversation;
 
 /**
- * IM会话
+ * 会话类型
  */
-public interface FIMConversation
+public enum FIMConversationType
 {
     /**
-     * 会话id
-     *
-     * @return
+     * 无效
      */
-    String getPeer();
-
+    Invalid,
     /**
-     * 会话类型
-     *
-     * @return
+     * C2C
      */
-    FIMConversationType getType();
-
+    C2C,
     /**
-     * 该会话的未读数量
-     *
-     * @return
+     * 群组
      */
-    long getUnreadMessageNum();
+    Group,
+    /**
+     * 系统
+     */
+    System;
 }

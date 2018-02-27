@@ -13,28 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.fanwe.lib.im;
+package com.fanwe.lib.im.msg;
 
-public enum FIMMsgState
+/**
+ * IM消息数据
+ *
+ * @param <M> 第三方IM消息类型
+ */
+public interface FIMMsgData<M>
 {
     /**
-     * 非法值
+     * 返回数据类型
+     *
+     * @return
      */
-    Invalid,
+    int getType();
+
     /**
-     * 发送失败
+     * 将当前数据解析为第三方SDK的消息
+     *
+     * @return
      */
-    SendFail,
+    M parseToSDKMsg();
+
     /**
-     * 发送中
+     * 将数据解析为FIM消息
+     *
+     * @return
      */
-    Sending,
-    /**
-     * 发送成功
-     */
-    SendSuccess,
-    /**
-     * 被标记为已删除
-     */
-    HasDeleted;
+    FIMMsg parseToMsg();
 }

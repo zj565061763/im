@@ -13,27 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.fanwe.lib.im;
+package com.fanwe.lib.im.msg;
 
-/**
- * 会话类型
- */
-public enum FIMConversationType
+public enum FIMMsgState
 {
     /**
-     * 无效
+     * 非法值
      */
     Invalid,
     /**
-     * C2C
+     * 发送失败
      */
-    C2C,
+    SendFail,
     /**
-     * 群组
+     * 发送中
      */
-    Group,
+    Sending,
     /**
-     * 系统
+     * 发送成功
      */
-    System;
+    SendSuccess,
+    /**
+     * 被标记为已删除
+     */
+    HasDeleted;
 }

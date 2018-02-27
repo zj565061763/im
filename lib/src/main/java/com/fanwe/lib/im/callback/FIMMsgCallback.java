@@ -15,7 +15,7 @@
  */
 package com.fanwe.lib.im.callback;
 
-import com.fanwe.lib.im.FIMMsg;
+import com.fanwe.lib.im.msg.FIMMsg;
 
 /**
  * IM消息接收回调

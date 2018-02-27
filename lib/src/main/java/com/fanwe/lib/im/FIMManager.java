@@ -20,6 +20,9 @@ import android.util.Log;
 
 import com.fanwe.lib.im.callback.FIMMsgCallback;
 import com.fanwe.lib.im.callback.FIMResultCallback;
+import com.fanwe.lib.im.conversation.FIMConversationType;
+import com.fanwe.lib.im.msg.FIMMsg;
+import com.fanwe.lib.im.msg.FIMMsgData;
 
 import java.util.HashMap;
 import java.util.Iterator;

@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.fanwe.lib.im.FIMManager;
-import com.fanwe.lib.im.FIMMsg;
+import com.fanwe.lib.im.msg.FIMMsg;
 import com.fanwe.lib.im.callback.FIMMsgCallback;
 
 public class MainActivity extends AppCompatActivity implements FIMMsgCallback
