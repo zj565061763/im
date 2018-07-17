@@ -36,8 +36,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class FIMManager
 {
-    public static final String TAG = "FIM";
-
     private static FIMManager sInstance;
 
     private FIMHandler mIMHandler;
@@ -58,9 +56,7 @@ public class FIMManager
             synchronized (FIMManager.class)
             {
                 if (sInstance == null)
-                {
                     sInstance = new FIMManager();
-                }
             }
         }
         return sInstance;
@@ -76,14 +72,9 @@ public class FIMManager
         mIsDebug = debug;
     }
 
-    /**
-     * 是否调试模式
-     *
-     * @return
-     */
-    public boolean isDebug()
+    private String getDebugTag()
     {
-        return mIsDebug;
+        return FIMManager.class.getSimpleName();
     }
 
     /**
@@ -104,9 +95,7 @@ public class FIMManager
     private FIMHandler getIMHandler()
     {
         if (mIMHandler == null)
-        {
             throw new NullPointerException("you must set a FIMHandler to FIMManager before this");
-        }
         return mIMHandler;
     }
 
@@ -118,15 +107,11 @@ public class FIMManager
     public synchronized void addMsgCallback(FIMMsgCallback callback)
     {
         if (callback == null || mListMsgCallback.contains(callback))
-        {
             return;
-        }
-        mListMsgCallback.add(callback);
 
+        mListMsgCallback.add(callback);
         if (mIsDebug)
-        {
-            Log.i(TAG, "FIMMsgCallback add size " + mListMsgCallback.size() + " " + callback + " " + Thread.currentThread().getName());
-        }
+            Log.i(getDebugTag(), "FIMMsgCallback add size " + mListMsgCallback.size() + " " + callback + " " + Thread.currentThread().getName());
     }
 
     /**
@@ -139,9 +124,7 @@ public class FIMManager
         if (mListMsgCallback.remove(callback))
         {
             if (mIsDebug)
-            {
-                Log.e(TAG, "FIMMsgCallback remove size " + mListMsgCallback.size() + " " + callback + " " + Thread.currentThread().getName());
-            }
+                Log.e(getDebugTag(), "FIMMsgCallback remove size " + mListMsgCallback.size() + " " + callback + " " + Thread.currentThread().getName());
         }
     }
 
@@ -226,14 +209,8 @@ public class FIMManager
      */
     synchronized FIMResultCallback removeCallbackById(String callbackId)
     {
-        CallbackInfo info = mMapCallback.remove(callbackId);
-        if (info != null)
-        {
-            return info.callback;
-        } else
-        {
-            return null;
-        }
+        final CallbackInfo info = mMapCallback.remove(callbackId);
+        return info == null ? null : info.callback;
     }
 
     /**
@@ -244,56 +221,21 @@ public class FIMManager
      */
     public synchronized int removeCallbackByTag(String tag)
     {
-        int count = 0;
         if (TextUtils.isEmpty(tag) || mMapCallback.isEmpty())
-        {
-            return count;
-        }
+            return 0;
 
-        Iterator<Map.Entry<String, CallbackInfo>> it = mMapCallback.entrySet().iterator();
+        int count = 0;
+        final Iterator<Map.Entry<String, CallbackInfo>> it = mMapCallback.entrySet().iterator();
         while (it.hasNext())
         {
-            Map.Entry<String, CallbackInfo> item = it.next();
-            CallbackInfo info = item.getValue();
-
+            final CallbackInfo info = it.next().getValue();
             if (tag.equals(info.tag))
             {
                 it.remove();
                 count++;
             }
         }
-
         return count;
-    }
-
-    /**
-     * 移除超过指定时间长度的回调对象
-     *
-     * @param duration 时间长度（毫秒）
-     */
-    public synchronized void removeCallbackByDuration(final long duration)
-    {
-        if (duration <= 0 || mMapCallback.isEmpty())
-        {
-            return;
-        }
-
-        final long currentTime = System.currentTimeMillis();
-        Iterator<Map.Entry<String, CallbackInfo>> it = mMapCallback.entrySet().iterator();
-        while (it.hasNext())
-        {
-            Map.Entry<String, CallbackInfo> item = it.next();
-            CallbackInfo info = item.getValue();
-
-            if (currentTime - info.createTime > duration)
-            {
-                it.remove();
-                if (mIsDebug)
-                {
-                    Log.e(TAG, "removeCallbackByDuration:" + info.callback);
-                }
-            }
-        }
     }
 
     /**
@@ -305,12 +247,10 @@ public class FIMManager
     private synchronized String generateCallbackId(FIMResultCallback callback)
     {
         if (callback == null)
-        {
             return null;
-        }
 
         final String callbackId = String.valueOf(UUID.randomUUID());
-        CallbackInfo info = new CallbackInfo(callback, callback.getTag());
+        final CallbackInfo info = new CallbackInfo(callback, callback.getTag());
 
         mMapCallback.put(callbackId, info);
         return callbackId;
@@ -323,7 +263,6 @@ public class FIMManager
     {
         public FIMResultCallback callback;
         public String tag;
-        public long createTime = System.currentTimeMillis();
 
         public CallbackInfo(FIMResultCallback callback, String tag)
         {

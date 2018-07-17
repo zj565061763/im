@@ -31,12 +31,11 @@ public abstract class FIMResultCallback<T>
      */
     public String getTag()
     {
-        String name = this.getClass().getName();
-        if (name.contains(KEY))
-        {
-            name = name.substring(0, name.indexOf(KEY));
-        }
-        return name;
+        String className = getClass().getName();
+        final int keyIndex = className.indexOf(KEY);
+        if (keyIndex > 0)
+            className = className.substring(0, keyIndex);
+        return className;
     }
 
     /**
