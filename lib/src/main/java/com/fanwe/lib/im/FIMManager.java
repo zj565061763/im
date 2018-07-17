@@ -104,7 +104,7 @@ public class FIMManager
      *
      * @param callback
      */
-    public void addMsgCallback(FIMMsgCallback callback)
+    public synchronized void addMsgCallback(FIMMsgCallback callback)
     {
         if (callback == null || mListMsgCallback.contains(callback))
             return;
@@ -119,7 +119,7 @@ public class FIMManager
      *
      * @param callback
      */
-    public void removeMsgCallback(FIMMsgCallback callback)
+    public synchronized void removeMsgCallback(FIMMsgCallback callback)
     {
         if (mListMsgCallback.remove(callback))
         {
@@ -128,7 +128,7 @@ public class FIMManager
         }
     }
 
-    void notifyReceiveMsg(FIMMsg fimMsg)
+    synchronized void notifyReceiveMsg(FIMMsg fimMsg)
     {
         for (FIMMsgCallback item : mListMsgCallback)
         {
@@ -204,7 +204,7 @@ public class FIMManager
      * @param callbackId 回调对应的id
      * @return
      */
-    FIMResultCallback removeCallbackById(String callbackId)
+    synchronized FIMResultCallback removeCallbackById(String callbackId)
     {
         final CallbackInfo info = mMapCallback.remove(callbackId);
         return info == null ? null : info.callback;
@@ -216,7 +216,7 @@ public class FIMManager
      * @param tag
      * @return 移除的数量
      */
-    public int removeCallbackByTag(String tag)
+    public synchronized int removeCallbackByTag(String tag)
     {
         if (TextUtils.isEmpty(tag) || mMapCallback.isEmpty())
             return 0;
@@ -241,7 +241,7 @@ public class FIMManager
      * @param callback
      * @return
      */
-    private String generateCallbackId(FIMResultCallback callback)
+    private synchronized String generateCallbackId(FIMResultCallback callback)
     {
         if (callback == null)
             return null;
