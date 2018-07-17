@@ -206,6 +206,9 @@ public class FIMManager
      */
     synchronized FIMResultCallback removeCallbackById(String callbackId)
     {
+        if (TextUtils.isEmpty(callbackId))
+            return null;
+
         final CallbackInfo info = mMapCallback.remove(callbackId);
         return info == null ? null : info.callback;
     }
