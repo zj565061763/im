@@ -1,11 +1,11 @@
 package com.fanwe.www.im.tim;
 
+import com.fanwe.lib.im.FIMMsgReceiver;
+import com.fanwe.lib.im.callback.FIMResultCallback;
 import com.fanwe.lib.im.conversation.FIMConversation;
 import com.fanwe.lib.im.conversation.FIMConversationType;
 import com.fanwe.lib.im.msg.FIMMsgData;
-import com.fanwe.lib.im.FIMMsgReceiver;
 import com.fanwe.lib.im.msg.FIMMsgState;
-import com.fanwe.lib.im.callback.FIMResultCallback;
 import com.tencent.TIMCustomElem;
 import com.tencent.TIMElem;
 import com.tencent.TIMElemType;
@@ -115,7 +115,7 @@ public class AppIMMsgReceiver extends FIMMsgReceiver<TIMMessage>
     }
 
     @Override
-    protected FIMMsgData<TIMMessage> onParseSDKMsg() throws Exception
+    protected FIMMsgData<TIMMessage> onParseSDKMsg(TIMMessage sdkMsg) throws Exception
     {
         FIMMsgData result = null;
 
