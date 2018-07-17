@@ -24,11 +24,11 @@ import com.fanwe.lib.im.conversation.FIMConversationType;
 import com.fanwe.lib.im.msg.FIMMsg;
 import com.fanwe.lib.im.msg.FIMMsgData;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -40,7 +40,7 @@ public class FIMManager
 
     private FIMHandler mIMHandler;
 
-    private final Map<String, CallbackInfo> mMapCallback = new ConcurrentHashMap<>();
+    private final Map<String, CallbackInfo> mMapCallback = new HashMap<>();
     private final List<FIMMsgCallback> mListMsgCallback = new CopyOnWriteArrayList<>();
 
     private boolean mIsDebug;
