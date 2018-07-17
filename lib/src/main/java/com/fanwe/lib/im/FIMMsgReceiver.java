@@ -97,7 +97,7 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
         mSDKMsg = sdkMsg;
         try
         {
-            mData = onParseSDKMsg();
+            mData = onParseSDKMsg(sdkMsg);
         } catch (Exception e)
         {
             onError(e);
@@ -135,10 +135,11 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
     /**
      * 将第三方的SDK消息解析为数据
      *
+     * @param sdkMsg
      * @return
      * @throws Exception
      */
-    protected abstract FIMMsgData<M> onParseSDKMsg() throws Exception;
+    protected abstract FIMMsgData<M> onParseSDKMsg(M sdkMsg) throws Exception;
 
     /**
      * 填充解析好的数据
