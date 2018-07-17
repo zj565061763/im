@@ -24,11 +24,11 @@ import com.fanwe.lib.im.conversation.FIMConversationType;
 import com.fanwe.lib.im.msg.FIMMsg;
 import com.fanwe.lib.im.msg.FIMMsgData;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -40,7 +40,7 @@ public class FIMManager
 
     private FIMHandler mIMHandler;
 
-    private final Map<String, CallbackInfo> mMapCallback = new HashMap<>();
+    private final Map<String, CallbackInfo> mMapCallback = new ConcurrentHashMap<>();
     private final List<FIMMsgCallback> mListMsgCallback = new CopyOnWriteArrayList<>();
 
     private boolean mIsDebug;
@@ -104,7 +104,7 @@ public class FIMManager
      *
      * @param callback
      */
-    public synchronized void addMsgCallback(FIMMsgCallback callback)
+    public void addMsgCallback(FIMMsgCallback callback)
     {
         if (callback == null || mListMsgCallback.contains(callback))
             return;
@@ -119,7 +119,7 @@ public class FIMManager
      *
      * @param callback
      */
-    public synchronized void removeMsgCallback(FIMMsgCallback callback)
+    public void removeMsgCallback(FIMMsgCallback callback)
     {
         if (mListMsgCallback.remove(callback))
         {
@@ -130,17 +130,14 @@ public class FIMManager
 
     void notifyReceiveMsg(FIMMsg fimMsg)
     {
-        synchronized (FIMManager.this)
+        for (FIMMsgCallback item : mListMsgCallback)
         {
-            for (FIMMsgCallback item : mListMsgCallback)
+            if (item.ignoreMsg(fimMsg))
             {
-                if (item.ignoreMsg(fimMsg))
-                {
-                    // 忽略当前消息
-                } else
-                {
-                    item.onReceiveMsg(fimMsg);
-                }
+                // 忽略当前消息
+            } else
+            {
+                item.onReceiveMsg(fimMsg);
             }
         }
     }
@@ -207,7 +204,7 @@ public class FIMManager
      * @param callbackId 回调对应的id
      * @return
      */
-    synchronized FIMResultCallback removeCallbackById(String callbackId)
+    FIMResultCallback removeCallbackById(String callbackId)
     {
         final CallbackInfo info = mMapCallback.remove(callbackId);
         return info == null ? null : info.callback;
@@ -219,7 +216,7 @@ public class FIMManager
      * @param tag
      * @return 移除的数量
      */
-    public synchronized int removeCallbackByTag(String tag)
+    public int removeCallbackByTag(String tag)
     {
         if (TextUtils.isEmpty(tag) || mMapCallback.isEmpty())
             return 0;
@@ -244,7 +241,7 @@ public class FIMManager
      * @param callback
      * @return
      */
-    private synchronized String generateCallbackId(FIMResultCallback callback)
+    private String generateCallbackId(FIMResultCallback callback)
     {
         if (callback == null)
             return null;
