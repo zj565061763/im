@@ -17,16 +17,12 @@ package com.fanwe.lib.im;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.text.TextUtils;
 
 import com.fanwe.lib.im.callback.FIMResultCallback;
 import com.fanwe.lib.im.msg.FIMMsg;
 import com.fanwe.lib.im.msg.FIMMsgData;
 
 import org.json.JSONObject;
-
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 
 /**
  * 第三方IM消息接收处理类
@@ -35,19 +31,8 @@ import java.lang.reflect.Type;
  */
 public abstract class FIMMsgReceiver<M> implements FIMMsg
 {
-    private Class<M> mSDKMsgClass;
     private M mSDKMsg;
     private FIMMsgData mData;
-
-    public FIMMsgReceiver()
-    {
-        ParameterizedType type = (ParameterizedType) getClass().getGenericSuperclass();
-        Type[] types = type.getActualTypeArguments();
-        if (types != null && types.length == 1)
-        {
-            mSDKMsgClass = (Class<M>) types[0];
-        }
-    }
 
     /**
      * 返回第三发IM消息对象
@@ -60,17 +45,13 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
     }
 
     @Override
-    public int getDataType()
+    public final int getDataType()
     {
-        if (mData != null)
-        {
-            return mData.getType();
-        }
-        return 0;
+        return mData == null ? 0 : mData.getType();
     }
 
     @Override
-    public FIMMsgData getData()
+    public final FIMMsgData getData()
     {
         return mData;
     }
@@ -93,19 +74,12 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
      */
     protected int guessDataTypeFromJson(String json)
     {
-        if (!TextUtils.isEmpty(json))
+        try
         {
-            final String jsonFieldName = getJsonFieldNameForDataType();
-            if (!TextUtils.isEmpty(jsonFieldName))
-            {
-                try
-                {
-                    return new JSONObject(json).getInt(jsonFieldName);
-                } catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
+            return new JSONObject(json).getInt(getJsonFieldNameForDataType());
+        } catch (Exception e)
+        {
+            e.printStackTrace();
         }
         return -1;
     }
@@ -115,19 +89,14 @@ public abstract class FIMMsgReceiver<M> implements FIMMsg
      *
      * @return
      */
-    public boolean parse(M sdkMsg)
+    public final boolean parse(M sdkMsg)
     {
         if (sdkMsg == null)
-        {
             throw new NullPointerException("sdkMsg must not be null");
-        }
-        if (!mSDKMsgClass.isInstance(sdkMsg))
-        {
-            throw new IllegalArgumentException("sdkMsg must be instance of " + mSDKMsgClass);
-        }
+
+        mSDKMsg = sdkMsg;
         try
         {
-            mSDKMsg = sdkMsg;
             mData = onParseSDKMsg();
         } catch (Exception e)
         {
