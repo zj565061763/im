@@ -1,7 +1,7 @@
-package com.fanwe.www.im.tim.data;
+package com.sd.www.im.tim.data;
 
-import com.fanwe.lib.im.msg.FIMMsg;
-import com.fanwe.lib.im.msg.FIMMsgData;
+import com.sd.lib.im.msg.FIMMsg;
+import com.sd.lib.im.msg.FIMMsgData;
 import com.google.gson.Gson;
 import com.tencent.TIMCustomElem;
 import com.tencent.TIMMessage;

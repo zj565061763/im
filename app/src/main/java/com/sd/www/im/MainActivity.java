@@ -1,11 +1,11 @@
-package com.fanwe.www.im;
+package com.sd.www.im;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.fanwe.lib.im.FIMManager;
-import com.fanwe.lib.im.msg.FIMMsg;
-import com.fanwe.lib.im.callback.FIMMsgCallback;
+import com.sd.lib.im.FIMManager;
+import com.sd.lib.im.msg.FIMMsg;
+import com.sd.lib.im.callback.FIMMsgCallback;
 
 public class MainActivity extends AppCompatActivity implements FIMMsgCallback
 {

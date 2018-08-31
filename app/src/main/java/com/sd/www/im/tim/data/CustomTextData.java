@@ -1,4 +1,4 @@
-package com.fanwe.www.im.tim.data;
+package com.sd.www.im.tim.data;
 
 /**
  * Created by Administrator on 2017/11/23.

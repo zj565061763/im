@@ -1,4 +1,4 @@
-package com.fanwe.www.im;
+package com.sd.www.im;
 
 import android.app.Application;
 

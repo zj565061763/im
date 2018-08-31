@@ -1,11 +1,11 @@
-package com.fanwe.www.im.tim;
+package com.sd.www.im.tim;
 
-import com.fanwe.lib.im.FIMMsgReceiver;
-import com.fanwe.lib.im.callback.FIMResultCallback;
-import com.fanwe.lib.im.conversation.FIMConversation;
-import com.fanwe.lib.im.conversation.FIMConversationType;
-import com.fanwe.lib.im.msg.FIMMsgData;
-import com.fanwe.lib.im.msg.FIMMsgState;
+import com.sd.lib.im.FIMMsgReceiver;
+import com.sd.lib.im.callback.FIMResultCallback;
+import com.sd.lib.im.conversation.FIMConversation;
+import com.sd.lib.im.conversation.FIMConversationType;
+import com.sd.lib.im.msg.FIMMsgData;
+import com.sd.lib.im.msg.FIMMsgState;
 import com.tencent.TIMCustomElem;
 import com.tencent.TIMElem;
 import com.tencent.TIMElemType;
