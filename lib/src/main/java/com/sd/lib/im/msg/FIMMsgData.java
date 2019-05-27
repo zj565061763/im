@@ -7,6 +7,32 @@ package com.sd.lib.im.msg;
  */
 public interface FIMMsgData<M>
 {
+    FIMMsgData DEFAULT = new FIMMsgData()
+    {
+        @Override
+        public int getType()
+        {
+            return Integer.MIN_VALUE;
+        }
+
+        @Override
+        public Object parseToSDKMsg()
+        {
+            return null;
+        }
+
+        @Override
+        public FIMMsg parseToMsg()
+        {
+            return null;
+        }
+
+        @Override
+        public void fillData(Object sdkMsg)
+        {
+        }
+    };
+
     /**
      * 返回数据类型
      *
@@ -27,4 +53,11 @@ public interface FIMMsgData<M>
      * @return
      */
     FIMMsg parseToMsg();
+
+    /**
+     * 填充第三方SDK消息中的数据到当前对象中
+     *
+     * @param sdkMsg
+     */
+    void fillData(M sdkMsg);
 }

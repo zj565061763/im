@@ -28,6 +28,8 @@ public class FIMManager
     private final Map<String, CallbackInfo> mMapCallback = new HashMap<>();
     private final List<FIMMsgCallback> mListMsgCallback = new CopyOnWriteArrayList<>();
 
+    private final Map<Integer, Class<? extends FIMMsgData>> mMapMsgDataClass = new HashMap<>();
+
     private boolean mIsDebug;
 
     private FIMManager()
@@ -85,6 +87,28 @@ public class FIMManager
     }
 
     /**
+     * 注册消息数据class
+     *
+     * @param type  消息数据类型
+     * @param clazz 消息数据对应的class
+     */
+    public void registerMsgDataClass(int type, Class<? extends FIMMsgData> clazz)
+    {
+        mMapMsgDataClass.put(type, clazz);
+    }
+
+    /**
+     * 返回type对应的消息数据类型
+     *
+     * @param type
+     * @return
+     */
+    public Class<? extends FIMMsgData> getMsgDataClass(int type)
+    {
+        return mMapMsgDataClass.get(type);
+    }
+
+    /**
      * 添加消息回调
      *
      * @param callback
@@ -132,9 +156,9 @@ public class FIMManager
      *
      * @return
      */
-    public FIMMsgReceiver newMsgReceiver()
+    public FIMMsgWrapper newMsgReceiver()
     {
-        return getIMHandler().newMsgReceiver();
+        return getIMHandler().newMsgWrapper();
     }
 
     /**

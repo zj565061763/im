@@ -4,7 +4,7 @@ import com.sd.lib.im.conversation.FIMConversationType;
 import com.sd.lib.im.FIMHandler;
 import com.sd.lib.im.msg.FIMMsg;
 import com.sd.lib.im.msg.FIMMsgData;
-import com.sd.lib.im.FIMMsgReceiver;
+import com.sd.lib.im.FIMMsgWrapper;
 import com.sd.lib.im.callback.FIMResultCallback;
 import com.tencent.TIMConversation;
 import com.tencent.TIMConversationType;
@@ -19,9 +19,9 @@ public class AppIMHandler extends FIMHandler<TIMMessage>
 {
 
     @Override
-    public FIMMsgReceiver<TIMMessage> newMsgReceiver()
+    public FIMMsgWrapper<TIMMessage> newMsgWrapper()
     {
-        return new AppIMMsgReceiver();
+        return new AppIMMsgWrapper();
     }
 
     @Override
@@ -41,7 +41,7 @@ public class AppIMHandler extends FIMHandler<TIMMessage>
         }
 
         final TIMMessage msg = msgData.parseToSDKMsg();
-        final FIMMsgReceiver<TIMMessage> receiver = newMsgReceiver();
+        final FIMMsgWrapper<TIMMessage> receiver = newMsgWrapper();
         receiver.parse(msg);
         conversation.sendMessage(msg, new TIMValueCallBack<TIMMessage>()
         {

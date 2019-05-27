@@ -8,13 +8,6 @@ import com.sd.lib.im.conversation.FIMConversation;
 public interface FIMMsg
 {
     /**
-     * 返回数据类型
-     *
-     * @return
-     */
-    int getDataType();
-
-    /**
      * 返回自定义数据对象
      *
      * @return
