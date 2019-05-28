@@ -1,6 +1,6 @@
 package com.sd.www.im.tim;
 
-import com.sd.lib.im.FIMMsgWrapper;
+import com.sd.lib.im.FIMMsgParser;
 import com.sd.lib.im.conversation.FIMConversation;
 import com.sd.lib.im.conversation.FIMConversationType;
 import com.sd.lib.im.msg.FIMMsgData;
@@ -18,7 +18,7 @@ import com.tencent.TIMTextElem;
  * Created by Administrator on 2017/11/23.
  */
 
-public class AppIMMsgWrapper extends FIMMsgWrapper<TIMMessage>
+public class AppIMMsgParser extends FIMMsgParser<TIMMessage>
 {
     public static final String DEFAULT_CHARSET = "UTF-8";
 

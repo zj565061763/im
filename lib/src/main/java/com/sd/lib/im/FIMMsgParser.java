@@ -13,7 +13,7 @@ import org.json.JSONObject;
  *
  * @param <M>第三方IM消息类型
  */
-public abstract class FIMMsgWrapper<M> implements FIMMsg
+public abstract class FIMMsgParser<M> implements FIMMsg
 {
     private M mSDKMsg;
     private FIMMsgData mData;

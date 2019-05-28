@@ -17,7 +17,7 @@ public abstract class FIMHandler<M>
      *
      * @return
      */
-    public abstract FIMMsgWrapper<M> newMsgWrapper();
+    public abstract FIMMsgParser<M> newMsgParser();
 
     /**
      * 移除并返回结果回调

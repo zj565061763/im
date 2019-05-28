@@ -156,9 +156,9 @@ public class FIMManager
      *
      * @return
      */
-    public FIMMsgWrapper newMsgReceiver()
+    public FIMMsgParser newMsgParser()
     {
-        return getIMHandler().newMsgWrapper();
+        return getIMHandler().newMsgParser();
     }
 
     /**
