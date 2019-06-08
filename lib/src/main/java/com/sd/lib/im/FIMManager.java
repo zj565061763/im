@@ -3,6 +3,7 @@ package com.sd.lib.im;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.sd.lib.im.annotation.MsgData;
 import com.sd.lib.im.callback.FIMMsgCallback;
 import com.sd.lib.im.callback.FIMResultCallback;
 import com.sd.lib.im.conversation.FIMConversationType;
@@ -89,11 +90,15 @@ public class FIMManager
     /**
      * 注册消息数据class
      *
-     * @param type  消息数据类型
      * @param clazz 消息数据对应的class
      */
-    public void registerMsgDataClass(int type, Class<? extends FIMMsgData> clazz)
+    public void registerMsgDataClass(Class<? extends FIMMsgData> clazz)
     {
+        final MsgData msgData = clazz.getAnnotation(MsgData.class);
+        if (msgData == null)
+            throw new IllegalArgumentException("(MsgData) annotation was not found in clazz: " + clazz.getName());
+
+        final int type = msgData.type();
         mMapMsgDataClass.put(type, clazz);
     }
 
