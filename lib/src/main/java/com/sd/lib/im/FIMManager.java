@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -22,15 +23,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class FIMManager
 {
+    private static final List<FIMMsgCallback> LIST_MSG_CALLBACK = new CopyOnWriteArrayList<>();
+    private static final Map<Integer, Class<? extends FIMMsgData>> MAP_MSG_DATA_CLASS = new HashMap<>();
+    private static final Map<String, CallbackInfo> MAP_RESULT_CALLBACK = new ConcurrentHashMap<>();
+
     private static FIMManager sInstance;
-
     private FIMHandler mIMHandler;
-
-    private final Map<String, CallbackInfo> mMapCallback = new HashMap<>();
-    private final List<FIMMsgCallback> mListMsgCallback = new CopyOnWriteArrayList<>();
-
-    private final Map<Integer, Class<? extends FIMMsgData>> mMapMsgDataClass = new HashMap<>();
-
     private boolean mIsDebug;
 
     private FIMManager()
@@ -99,7 +97,7 @@ public class FIMManager
             throw new IllegalArgumentException("(MsgData) annotation was not found in clazz: " + clazz.getName());
 
         final int type = msgData.type();
-        mMapMsgDataClass.put(type, clazz);
+        MAP_MSG_DATA_CLASS.put(type, clazz);
     }
 
     /**
@@ -110,7 +108,7 @@ public class FIMManager
      */
     public Class<? extends FIMMsgData> getMsgDataClass(int type)
     {
-        return mMapMsgDataClass.get(type);
+        return MAP_MSG_DATA_CLASS.get(type);
     }
 
     /**
@@ -118,14 +116,15 @@ public class FIMManager
      *
      * @param callback
      */
-    public synchronized void addMsgCallback(FIMMsgCallback callback)
+    public void addMsgCallback(FIMMsgCallback callback)
     {
-        if (callback == null || mListMsgCallback.contains(callback))
+        if (callback == null || LIST_MSG_CALLBACK.contains(callback))
             return;
 
-        mListMsgCallback.add(callback);
+        LIST_MSG_CALLBACK.add(callback);
+
         if (mIsDebug)
-            Log.i(getDebugTag(), "FIMMsgCallback add size " + mListMsgCallback.size() + " " + callback + " " + Thread.currentThread().getName());
+            Log.i(getDebugTag(), "FIMMsgCallback add size " + LIST_MSG_CALLBACK.size() + " " + callback + " " + Thread.currentThread().getName());
     }
 
     /**
@@ -133,18 +132,18 @@ public class FIMManager
      *
      * @param callback
      */
-    public synchronized void removeMsgCallback(FIMMsgCallback callback)
+    public void removeMsgCallback(FIMMsgCallback callback)
     {
-        if (mListMsgCallback.remove(callback))
+        if (LIST_MSG_CALLBACK.remove(callback))
         {
             if (mIsDebug)
-                Log.e(getDebugTag(), "FIMMsgCallback remove size " + mListMsgCallback.size() + " " + callback + " " + Thread.currentThread().getName());
+                Log.e(getDebugTag(), "FIMMsgCallback remove size " + LIST_MSG_CALLBACK.size() + " " + callback + " " + Thread.currentThread().getName());
         }
     }
 
-    synchronized void notifyReceiveMsg(FIMMsg fimMsg)
+    void notifyReceiveMsg(FIMMsg fimMsg)
     {
-        for (FIMMsgCallback item : mListMsgCallback)
+        for (FIMMsgCallback item : LIST_MSG_CALLBACK)
         {
             if (item.ignoreMsg(fimMsg))
             {
@@ -218,12 +217,12 @@ public class FIMManager
      * @param callbackId 回调对应的id
      * @return
      */
-    synchronized FIMResultCallback removeCallbackById(String callbackId)
+    FIMResultCallback removeCallbackById(String callbackId)
     {
         if (TextUtils.isEmpty(callbackId))
             return null;
 
-        final CallbackInfo info = mMapCallback.remove(callbackId);
+        final CallbackInfo info = MAP_RESULT_CALLBACK.remove(callbackId);
         return info == null ? null : info.callback;
     }
 
@@ -233,13 +232,13 @@ public class FIMManager
      * @param tag
      * @return 移除的数量
      */
-    public synchronized int removeCallbackByTag(String tag)
+    public int removeCallbackByTag(String tag)
     {
-        if (TextUtils.isEmpty(tag) || mMapCallback.isEmpty())
+        if (TextUtils.isEmpty(tag) || MAP_RESULT_CALLBACK.isEmpty())
             return 0;
 
         int count = 0;
-        final Iterator<Map.Entry<String, CallbackInfo>> it = mMapCallback.entrySet().iterator();
+        final Iterator<Map.Entry<String, CallbackInfo>> it = MAP_RESULT_CALLBACK.entrySet().iterator();
         while (it.hasNext())
         {
             final CallbackInfo info = it.next().getValue();
@@ -258,7 +257,7 @@ public class FIMManager
      * @param callback
      * @return
      */
-    private synchronized String generateCallbackId(FIMResultCallback callback)
+    private String generateCallbackId(FIMResultCallback callback)
     {
         if (callback == null)
             return null;
@@ -266,7 +265,7 @@ public class FIMManager
         final String callbackId = String.valueOf(UUID.randomUUID());
         final CallbackInfo info = new CallbackInfo(callback, callback.getTag());
 
-        mMapCallback.put(callbackId, info);
+        MAP_RESULT_CALLBACK.put(callbackId, info);
         return callbackId;
     }
 
@@ -275,8 +274,8 @@ public class FIMManager
      */
     private static final class CallbackInfo
     {
-        public FIMResultCallback callback;
-        public String tag;
+        public final FIMResultCallback callback;
+        public final String tag;
 
         public CallbackInfo(FIMResultCallback callback, String tag)
         {
