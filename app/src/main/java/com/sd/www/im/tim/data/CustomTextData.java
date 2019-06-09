@@ -1,21 +1,13 @@
 package com.sd.www.im.tim.data;
 
-import com.tencent.TIMMessage;
+import com.sd.lib.im.annotation.MsgData;
 
-/**
- * Created by Administrator on 2017/11/23.
- */
-
+@MsgData(type = CustomData.TEXT_IM)
 public class CustomTextData extends CustomData
 {
     @Override
-    public int getType()
+    public FillDataTask getFillDataTask()
     {
-        return TEXT_IM;
-    }
-
-    @Override
-    public void fillData(TIMMessage sdkMsg)
-    {
+        return super.getFillDataTask();
     }
 }

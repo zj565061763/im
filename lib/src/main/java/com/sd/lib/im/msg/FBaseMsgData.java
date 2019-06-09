@@ -20,4 +20,10 @@ public abstract class FBaseMsgData<M> implements FIMMsgData<M>
     {
         return type;
     }
+
+    @Override
+    public FillDataTask getFillDataTask()
+    {
+        return null;
+    }
 }

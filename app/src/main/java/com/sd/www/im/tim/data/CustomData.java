@@ -1,15 +1,15 @@
 package com.sd.www.im.tim.data;
 
-import com.sd.lib.im.msg.FIMMsg;
-import com.sd.lib.im.msg.FIMMsgData;
 import com.google.gson.Gson;
+import com.sd.lib.im.msg.FBaseMsgData;
+import com.sd.lib.im.msg.FIMMsg;
 import com.tencent.TIMCustomElem;
 import com.tencent.TIMMessage;
 
 /**
  * Created by Administrator on 2017/11/23.
  */
-public abstract class CustomData implements FIMMsgData<TIMMessage>
+public abstract class CustomData extends FBaseMsgData<TIMMessage>
 {
     public static final int TEXT_IM = 1;
 
@@ -34,7 +34,12 @@ public abstract class CustomData implements FIMMsgData<TIMMessage>
     @Override
     public FIMMsg parseToMsg()
     {
-
         return null;
+    }
+
+    @Override
+    public void fillData(TIMMessage sdkMsg)
+    {
+
     }
 }

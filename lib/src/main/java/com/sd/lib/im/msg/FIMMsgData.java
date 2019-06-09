@@ -33,6 +33,12 @@ public interface FIMMsgData<M>
         public void fillData(Object sdkMsg)
         {
         }
+
+        @Override
+        public FillDataTask getFillDataTask()
+        {
+            return null;
+        }
     };
 
     /**
@@ -62,4 +68,23 @@ public interface FIMMsgData<M>
      * @param sdkMsg
      */
     void fillData(M sdkMsg);
+
+    /**
+     * 返回需要异步填充数据的任务
+     *
+     * @return 如果不为null-说明需要异步填充数据；null-不需要异步填充数据
+     */
+    FillDataTask getFillDataTask();
+
+    interface FillDataTask
+    {
+        void execute(FillDataCallback callback);
+    }
+
+    interface FillDataCallback
+    {
+        void onSuccess();
+
+        void onError(int code, int desc);
+    }
 }
