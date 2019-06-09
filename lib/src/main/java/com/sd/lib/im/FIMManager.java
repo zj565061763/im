@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.sd.lib.im.annotation.MsgData;
 import com.sd.lib.im.callback.FIMMsgCallback;
+import com.sd.lib.im.callback.FIMMsgSendCallback;
 import com.sd.lib.im.callback.FIMResultCallback;
 import com.sd.lib.im.conversation.FIMConversationType;
 import com.sd.lib.im.msg.FIMMsg;
@@ -26,6 +27,7 @@ public class FIMManager
     private static final List<FIMMsgCallback> LIST_MSG_CALLBACK = new CopyOnWriteArrayList<>();
     private static final Map<Integer, Class<? extends FIMMsgData>> MAP_MSG_DATA_CLASS = new HashMap<>();
     private static final Map<String, CallbackInfo> MAP_RESULT_CALLBACK = new ConcurrentHashMap<>();
+    private static final List<FIMMsgSendCallback> LIST_MSG_SEND_CALLBACK = new CopyOnWriteArrayList<>();
 
     private static FIMManager sInstance;
     private FIMHandler mIMHandler;
@@ -153,6 +155,41 @@ public class FIMManager
                 item.onReceiveMsg(fimMsg);
             }
         }
+    }
+
+    /**
+     * 添加消息发送回调
+     *
+     * @param callback
+     */
+    public void addMsgSendCallback(FIMMsgSendCallback callback)
+    {
+        if (callback == null || LIST_MSG_SEND_CALLBACK.contains(callback))
+            return;
+
+        LIST_MSG_SEND_CALLBACK.add(callback);
+
+        if (mIsDebug)
+            Log.i(getDebugTag(), "FIMMsgSendCallback add size " + LIST_MSG_SEND_CALLBACK.size() + " " + callback + " " + Thread.currentThread().getName());
+    }
+
+    /**
+     * 移除消息发送回调
+     *
+     * @param callback
+     */
+    public void removeMsgSendCallback(FIMMsgSendCallback callback)
+    {
+        if (LIST_MSG_SEND_CALLBACK.remove(callback))
+        {
+            if (mIsDebug)
+                Log.e(getDebugTag(), "FIMMsgSendCallback remove size " + LIST_MSG_SEND_CALLBACK.size() + " " + callback + " " + Thread.currentThread().getName());
+        }
+    }
+
+    List<FIMMsgSendCallback> getMsgSendCallback()
+    {
+        return LIST_MSG_SEND_CALLBACK;
     }
 
     /**

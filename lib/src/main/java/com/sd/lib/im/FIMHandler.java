@@ -1,9 +1,12 @@
 package com.sd.lib.im;
 
+import com.sd.lib.im.callback.FIMMsgSendCallback;
 import com.sd.lib.im.callback.FIMResultCallback;
 import com.sd.lib.im.conversation.FIMConversationType;
 import com.sd.lib.im.msg.FIMMsg;
 import com.sd.lib.im.msg.FIMMsgData;
+
+import java.util.List;
 
 /**
  * IM处理类
@@ -25,9 +28,19 @@ public abstract class FIMHandler<M>
      * @param callbackId 回调id
      * @return
      */
-    public final FIMResultCallback removeCallbackById(String callbackId)
+    protected final FIMResultCallback removeCallbackById(String callbackId)
     {
         return FIMManager.getInstance().removeCallbackById(callbackId);
+    }
+
+    /**
+     * 返回所有消息发送回调
+     *
+     * @return
+     */
+    protected final List<FIMMsgSendCallback> getMsgSendCallback()
+    {
+        return FIMManager.getInstance().getMsgSendCallback();
     }
 
     /**

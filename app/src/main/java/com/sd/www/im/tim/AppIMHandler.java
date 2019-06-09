@@ -1,11 +1,11 @@
 package com.sd.www.im.tim;
 
-import com.sd.lib.im.conversation.FIMConversationType;
 import com.sd.lib.im.FIMHandler;
-import com.sd.lib.im.msg.FIMMsg;
-import com.sd.lib.im.msg.FIMMsgData;
 import com.sd.lib.im.FIMMsgParser;
 import com.sd.lib.im.callback.FIMResultCallback;
+import com.sd.lib.im.conversation.FIMConversationType;
+import com.sd.lib.im.msg.FIMMsg;
+import com.sd.lib.im.msg.FIMMsgData;
 import com.tencent.TIMConversation;
 import com.tencent.TIMConversationType;
 import com.tencent.TIMManager;
