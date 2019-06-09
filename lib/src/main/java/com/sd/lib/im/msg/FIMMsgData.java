@@ -85,6 +85,6 @@ public interface FIMMsgData<M>
     {
         void onSuccess();
 
-        void onError(int code, int desc);
+        void onError(int code, String desc);
     }
 }
