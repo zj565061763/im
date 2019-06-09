@@ -8,5 +8,5 @@ public interface FIMMsgSendCallback
 
     void onSendSuccess(FIMMsg msg);
 
-    void onSendError(int code, String desc);
+    void onSendError(FIMMsg msg, int code, String desc);
 }
