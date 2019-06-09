@@ -2,7 +2,6 @@ package com.sd.lib.im.msg;
 
 import com.sd.lib.im.annotation.MsgData;
 
-@MsgData(type = -1)
 public abstract class FBaseMsgData<M> implements FIMMsgData<M>
 {
     private int type;
