@@ -31,7 +31,13 @@ public abstract class FIMMsgParser<M> implements FIMMsg
     @Override
     public final FIMMsgData getData()
     {
-        return mData != null ? mData : FIMMsgData.DEFAULT;
+        return mData != null ? mData : FIMMsgData.EMPTY;
+    }
+
+    @Override
+    public int getDataType()
+    {
+        return getData().getType();
     }
 
     /**
@@ -93,7 +99,7 @@ public abstract class FIMMsgParser<M> implements FIMMsg
         {
             e.printStackTrace();
         }
-        return -1;
+        return FIMMsgData.TYPE_NONE;
     }
 
     /**

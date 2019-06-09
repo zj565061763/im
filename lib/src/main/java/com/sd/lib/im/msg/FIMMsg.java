@@ -15,6 +15,13 @@ public interface FIMMsg
     FIMMsgData getData();
 
     /**
+     * 数据类型
+     *
+     * @return
+     */
+    int getDataType();
+
+    /**
      * 消息是否是自己发送的
      *
      * @return

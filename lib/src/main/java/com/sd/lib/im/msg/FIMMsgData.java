@@ -7,12 +7,14 @@ package com.sd.lib.im.msg;
  */
 public interface FIMMsgData<M>
 {
-    FIMMsgData DEFAULT = new FIMMsgData()
+    int TYPE_NONE = Integer.MIN_VALUE;
+
+    FIMMsgData EMPTY = new FIMMsgData()
     {
         @Override
         public int getType()
         {
-            return Integer.MIN_VALUE;
+            return TYPE_NONE;
         }
 
         @Override
