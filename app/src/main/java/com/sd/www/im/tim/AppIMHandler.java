@@ -3,7 +3,7 @@ package com.sd.www.im.tim;
 import com.sd.lib.im.FIMHandler;
 import com.sd.lib.im.FIMMsgParser;
 import com.sd.lib.im.callback.FIMResultCallback;
-import com.sd.lib.im.conversation.FIMConversationType;
+import com.sd.lib.im.common.SendMsgParam;
 import com.sd.lib.im.msg.FIMMsg;
 import com.sd.lib.im.msg.FIMMsgData;
 import com.tencent.TIMConversation;
@@ -17,7 +17,6 @@ import com.tencent.TIMValueCallBack;
  */
 public class AppIMHandler extends FIMHandler<TIMMessage>
 {
-
     @Override
     public FIMMsgParser<TIMMessage> newMsgParser()
     {
@@ -25,16 +24,16 @@ public class AppIMHandler extends FIMHandler<TIMMessage>
     }
 
     @Override
-    public FIMMsg sendMsg(String peer, FIMMsgData<TIMMessage> msgData, FIMConversationType conversationType, final String callbackId)
+    public FIMMsg sendMsg(SendMsgParam param, FIMMsgData<TIMMessage> msgData, final String callbackId)
     {
         TIMConversation conversation = null;
-        switch (conversationType)
+        switch (param.conversationType)
         {
             case C2C:
-                conversation = TIMManager.getInstance().getConversation(TIMConversationType.C2C, peer);
+                conversation = TIMManager.getInstance().getConversation(TIMConversationType.C2C, param.peer);
                 break;
             case Group:
-                conversation = TIMManager.getInstance().getConversation(TIMConversationType.Group, peer);
+                conversation = TIMManager.getInstance().getConversation(TIMConversationType.Group, param.peer);
                 break;
             default:
                 break;

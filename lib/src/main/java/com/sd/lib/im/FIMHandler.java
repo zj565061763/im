@@ -2,7 +2,7 @@ package com.sd.lib.im;
 
 import com.sd.lib.im.callback.FIMMsgSendCallback;
 import com.sd.lib.im.callback.FIMResultCallback;
-import com.sd.lib.im.conversation.FIMConversationType;
+import com.sd.lib.im.common.SendMsgParam;
 import com.sd.lib.im.msg.FIMMsg;
 import com.sd.lib.im.msg.FIMMsgData;
 
@@ -46,13 +46,12 @@ public abstract class FIMHandler<M>
     /**
      * 发送消息
      *
-     * @param peer             对方id
-     * @param msgData          消息数据
-     * @param conversationType 消息类型
-     * @param callbackId       回调id
+     * @param param      参数配置
+     * @param msgData    消息数据
+     * @param callbackId 回调id
      * @return
      */
-    public abstract FIMMsg sendMsg(String peer, FIMMsgData<M> msgData, FIMConversationType conversationType, String callbackId);
+    public abstract FIMMsg sendMsg(SendMsgParam param, FIMMsgData<M> msgData, String callbackId);
 
     /**
      * 加入群组

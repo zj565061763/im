@@ -7,6 +7,7 @@ import com.sd.lib.im.annotation.MsgData;
 import com.sd.lib.im.callback.FIMMsgCallback;
 import com.sd.lib.im.callback.FIMMsgSendCallback;
 import com.sd.lib.im.callback.FIMResultCallback;
+import com.sd.lib.im.common.SendMsgParam;
 import com.sd.lib.im.conversation.FIMConversationType;
 import com.sd.lib.im.msg.FIMMsg;
 import com.sd.lib.im.msg.FIMMsgData;
@@ -211,7 +212,12 @@ public class FIMManager
      */
     public FIMMsg sendMsgC2C(String peer, FIMMsgData data, FIMResultCallback<FIMMsg> callback)
     {
-        return getIMHandler().sendMsg(peer, data, FIMConversationType.C2C, generateCallbackId(callback));
+        final SendMsgParam param = new SendMsgParam.Builder()
+                .setPeer(peer)
+                .setConversationType(FIMConversationType.C2C)
+                .build();
+
+        return sendMsg(param, data, callback);
     }
 
     /**
@@ -223,7 +229,25 @@ public class FIMManager
      */
     public FIMMsg sendMsgGroup(String peer, FIMMsgData data, FIMResultCallback<FIMMsg> callback)
     {
-        return getIMHandler().sendMsg(peer, data, FIMConversationType.Group, generateCallbackId(callback));
+        final SendMsgParam param = new SendMsgParam.Builder()
+                .setPeer(peer)
+                .setConversationType(FIMConversationType.Group)
+                .build();
+
+        return sendMsg(param, data, callback);
+    }
+
+    /**
+     * 发送消息
+     *
+     * @param param    {@link SendMsgParam}
+     * @param data     要发送的数据
+     * @param callback
+     * @return
+     */
+    public FIMMsg sendMsg(SendMsgParam param, FIMMsgData data, FIMResultCallback<FIMMsg> callback)
+    {
+        return getIMHandler().sendMsg(param, data, generateCallbackId(callback));
     }
 
     /**
