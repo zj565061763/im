@@ -2,6 +2,7 @@ package com.sd.lib.im;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 
 import com.sd.lib.im.msg.FIMMsg;
 import com.sd.lib.im.msg.FIMMsgData;
@@ -59,27 +60,29 @@ public abstract class FIMMsgParser<M> implements FIMMsg
             json = onParseToJson(sdkMsg);
         } catch (Exception e)
         {
-            onErrorParseToJson(e);
+            onError(e);
         }
+        if (TextUtils.isEmpty(json))
+            return false;
 
-        if (json != null && !json.isEmpty())
+        final int type = getTypeFromJson(json);
+        final Class clazz = FIMManager.getInstance().getMsgDataClass(type);
+        if (clazz == null)
         {
-            final int type = getTypeFromJson(json);
-            final Class clazz = FIMManager.getInstance().getMsgDataClass(type);
-            try
-            {
-                if (clazz == null)
-                    throw new RuntimeException("Msg data class for " + type + " was not found");
-
-                mData = onParseToMsgData(type, json, clazz);
-            } catch (Exception e)
-            {
-                onErrorParseToMsgData(e);
-            }
-
-            if (mData != null)
-                mData.fillData(sdkMsg);
+            onError(new RuntimeException("Msg data class for " + type + " was not found"));
+            return false;
         }
+
+        try
+        {
+            mData = onParseToMsgData(type, json, clazz);
+        } catch (Exception e)
+        {
+            onError(e);
+        }
+
+        if (mData != null)
+            mData.fillData(sdkMsg);
 
         return mData != null;
     }
@@ -142,22 +145,11 @@ public abstract class FIMMsgParser<M> implements FIMMsg
     }
 
     /**
-     * 转json出错
+     * 解析异常
      *
      * @param e
      */
-    protected void onErrorParseToJson(Exception e)
+    protected void onError(Exception e)
     {
-
-    }
-
-    /**
-     * 解析异常回调
-     *
-     * @param e
-     */
-    protected void onErrorParseToMsgData(Exception e)
-    {
-
     }
 }
