@@ -78,6 +78,8 @@ public interface FIMMsgData<M>
 
     interface FillDataTask
     {
+        FillDataState getState();
+
         void execute(FillDataCallback callback);
     }
 
@@ -86,5 +88,13 @@ public interface FIMMsgData<M>
         void onSuccess();
 
         void onError(int code, String desc);
+    }
+
+    enum FillDataState
+    {
+        None,
+        Executing,
+        Success,
+        Error,
     }
 }
