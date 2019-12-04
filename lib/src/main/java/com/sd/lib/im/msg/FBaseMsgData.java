@@ -28,7 +28,7 @@ public abstract class FBaseMsgData<M> implements FIMMsgData<M>
     }
 
     @Override
-    public String getDescription()
+    public String getConversationDescription()
     {
         return "";
     }

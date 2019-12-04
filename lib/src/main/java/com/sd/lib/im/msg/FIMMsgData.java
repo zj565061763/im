@@ -41,7 +41,7 @@ public interface FIMMsgData<M>
         }
 
         @Override
-        public String getDescription()
+        public String getConversationDescription()
         {
             return "";
         }
@@ -83,11 +83,11 @@ public interface FIMMsgData<M>
     FillDataTask getFillDataTask();
 
     /**
-     * 返回消息描述
+     * 返回会话消息描述
      *
      * @return
      */
-    String getDescription();
+    String getConversationDescription();
 
     interface FillDataTask
     {
