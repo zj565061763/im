@@ -39,6 +39,12 @@ public interface FIMMsgData<M>
         {
             return null;
         }
+
+        @Override
+        public String getDescription()
+        {
+            return "";
+        }
     };
 
     /**
@@ -75,6 +81,13 @@ public interface FIMMsgData<M>
      * @return 如果不为null-说明需要异步填充数据；null-不需要异步填充数据
      */
     FillDataTask getFillDataTask();
+
+    /**
+     * 返回消息描述
+     *
+     * @return
+     */
+    String getDescription();
 
     interface FillDataTask
     {

@@ -26,4 +26,10 @@ public abstract class FBaseMsgData<M> implements FIMMsgData<M>
     {
         return null;
     }
+
+    @Override
+    public String getDescription()
+    {
+        return "";
+    }
 }
