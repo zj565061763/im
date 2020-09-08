@@ -44,12 +44,12 @@ public class FIMManager
         return sInstance;
     }
 
-    private final Map<Integer, Class<? extends FIMMsgData>> mMapMsgDataClass = new HashMap<>();
+    private final Map<Integer, Class<? extends FIMMsgData>> mMsgDataClassHolder = new HashMap<>();
 
     private final Map<FIMMsgCallback, String> mMsgCallbackHolder = new ConcurrentHashMap<>();
     private final Map<FIMMsgSendCallback, String> mMsgSendCallbackHolder = new ConcurrentHashMap<>();
 
-    private final Map<String, CallbackInfo> mMapCallbackInfo = new ConcurrentHashMap<>();
+    private final Map<String, CallbackInfo> mCallbackInfoHolder = new ConcurrentHashMap<>();
     private final Map<FIMSendInterceptor, String> mSendInterceptorHolder = new ConcurrentHashMap<>();
 
     private FIMHandler mIMHandler;
@@ -104,7 +104,7 @@ public class FIMManager
             throw new IllegalArgumentException("(MsgData) annotation was not found in clazz: " + clazz.getName());
 
         final int type = msgData.type();
-        mMapMsgDataClass.put(type, clazz);
+        mMsgDataClassHolder.put(type, clazz);
     }
 
     /**
@@ -115,7 +115,7 @@ public class FIMManager
      */
     public Class<? extends FIMMsgData> getMsgDataClass(int type)
     {
-        return mMapMsgDataClass.get(type);
+        return mMsgDataClassHolder.get(type);
     }
 
     /**
@@ -322,7 +322,7 @@ public class FIMManager
         if (TextUtils.isEmpty(callbackId))
             return null;
 
-        final CallbackInfo info = mMapCallbackInfo.remove(callbackId);
+        final CallbackInfo info = mCallbackInfoHolder.remove(callbackId);
         return info == null ? null : info.callback;
     }
 
@@ -334,11 +334,11 @@ public class FIMManager
      */
     public int removeCallbackByTag(String tag)
     {
-        if (TextUtils.isEmpty(tag) || mMapCallbackInfo.isEmpty())
+        if (TextUtils.isEmpty(tag) || mCallbackInfoHolder.isEmpty())
             return 0;
 
         int count = 0;
-        final Iterator<Map.Entry<String, CallbackInfo>> it = mMapCallbackInfo.entrySet().iterator();
+        final Iterator<Map.Entry<String, CallbackInfo>> it = mCallbackInfoHolder.entrySet().iterator();
         while (it.hasNext())
         {
             final CallbackInfo info = it.next().getValue();
@@ -365,7 +365,7 @@ public class FIMManager
         final String callbackId = String.valueOf(UUID.randomUUID());
         final CallbackInfo info = new CallbackInfo(callback, callback.getTag());
 
-        mMapCallbackInfo.put(callbackId, info);
+        mCallbackInfoHolder.put(callbackId, info);
         return callbackId;
     }
 
