@@ -12,27 +12,19 @@ import com.sd.lib.im.conversation.FIMConversationType;
 import com.sd.lib.im.msg.FIMMsg;
 import com.sd.lib.im.msg.FIMMsgData;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * IM管理基类
  */
 public class FIMManager
 {
-    private static final List<FIMMsgCallback> LIST_MSG_CALLBACK = new CopyOnWriteArrayList<>();
-    private static final Map<Integer, Class<? extends FIMMsgData>> MAP_MSG_DATA_CLASS = new HashMap<>();
-    private static final Map<String, CallbackInfo> MAP_RESULT_CALLBACK = new ConcurrentHashMap<>();
-    private static final List<FIMMsgSendCallback> LIST_MSG_SEND_CALLBACK = new CopyOnWriteArrayList<>();
-
     private static FIMManager sInstance;
-    private FIMHandler mIMHandler;
-    private boolean mIsDebug;
 
     private FIMManager()
     {
@@ -50,6 +42,16 @@ public class FIMManager
         }
         return sInstance;
     }
+
+    private final Map<Integer, Class<? extends FIMMsgData>> mMapMsgDataClass = new HashMap<>();
+
+    private final Map<FIMMsgCallback, String> mMsgCallbackHolder = new ConcurrentHashMap<>();
+    private final Map<FIMMsgSendCallback, String> mMsgSendCallbackHolder = new ConcurrentHashMap<>();
+
+    private final Map<String, CallbackInfo> mMapCallbackInfo = new ConcurrentHashMap<>();
+
+    private FIMHandler mIMHandler;
+    private boolean mIsDebug;
 
     /**
      * 设置是否调试模式
@@ -100,7 +102,7 @@ public class FIMManager
             throw new IllegalArgumentException("(MsgData) annotation was not found in clazz: " + clazz.getName());
 
         final int type = msgData.type();
-        MAP_MSG_DATA_CLASS.put(type, clazz);
+        mMapMsgDataClass.put(type, clazz);
     }
 
     /**
@@ -111,7 +113,7 @@ public class FIMManager
      */
     public Class<? extends FIMMsgData> getMsgDataClass(int type)
     {
-        return MAP_MSG_DATA_CLASS.get(type);
+        return mMapMsgDataClass.get(type);
     }
 
     /**
@@ -121,13 +123,13 @@ public class FIMManager
      */
     public void addMsgCallback(FIMMsgCallback callback)
     {
-        if (callback == null || LIST_MSG_CALLBACK.contains(callback))
+        if (callback == null)
             return;
 
-        LIST_MSG_CALLBACK.add(callback);
+        mMsgCallbackHolder.put(callback, "");
 
         if (mIsDebug)
-            Log.i(getDebugTag(), "FIMMsgCallback add size " + LIST_MSG_CALLBACK.size() + " " + callback + " " + Thread.currentThread().getName());
+            Log.i(getDebugTag(), "FIMMsgCallback add size " + mMsgCallbackHolder.size() + " " + callback + " " + Thread.currentThread().getName());
     }
 
     /**
@@ -137,16 +139,19 @@ public class FIMManager
      */
     public void removeMsgCallback(FIMMsgCallback callback)
     {
-        if (LIST_MSG_CALLBACK.remove(callback))
+        if (callback == null)
+            return;
+
+        if (mMsgCallbackHolder.remove(callback) != null)
         {
             if (mIsDebug)
-                Log.e(getDebugTag(), "FIMMsgCallback remove size " + LIST_MSG_CALLBACK.size() + " " + callback + " " + Thread.currentThread().getName());
+                Log.e(getDebugTag(), "FIMMsgCallback remove size " + mMsgCallbackHolder.size() + " " + callback + " " + Thread.currentThread().getName());
         }
     }
 
     void notifyReceiveMsg(FIMMsg fimMsg)
     {
-        for (FIMMsgCallback item : LIST_MSG_CALLBACK)
+        for (FIMMsgCallback item : mMsgCallbackHolder.keySet())
         {
             if (item.ignoreMsg(fimMsg))
             {
@@ -165,13 +170,13 @@ public class FIMManager
      */
     public void addMsgSendCallback(FIMMsgSendCallback callback)
     {
-        if (callback == null || LIST_MSG_SEND_CALLBACK.contains(callback))
+        if (callback == null)
             return;
 
-        LIST_MSG_SEND_CALLBACK.add(callback);
+        mMsgSendCallbackHolder.put(callback, "");
 
         if (mIsDebug)
-            Log.i(getDebugTag(), "FIMMsgSendCallback add size " + LIST_MSG_SEND_CALLBACK.size() + " " + callback + " " + Thread.currentThread().getName());
+            Log.i(getDebugTag(), "FIMMsgSendCallback add size " + mMsgSendCallbackHolder.size() + " " + callback + " " + Thread.currentThread().getName());
     }
 
     /**
@@ -181,16 +186,16 @@ public class FIMManager
      */
     public void removeMsgSendCallback(FIMMsgSendCallback callback)
     {
-        if (LIST_MSG_SEND_CALLBACK.remove(callback))
+        if (mMsgSendCallbackHolder.remove(callback) != null)
         {
             if (mIsDebug)
-                Log.e(getDebugTag(), "FIMMsgSendCallback remove size " + LIST_MSG_SEND_CALLBACK.size() + " " + callback + " " + Thread.currentThread().getName());
+                Log.e(getDebugTag(), "FIMMsgSendCallback remove size " + mMsgSendCallbackHolder.size() + " " + callback + " " + Thread.currentThread().getName());
         }
     }
 
-    List<FIMMsgSendCallback> getMsgSendCallback()
+    Collection<FIMMsgSendCallback> getMsgSendCallback()
     {
-        return LIST_MSG_SEND_CALLBACK;
+        return mMsgSendCallbackHolder.keySet();
     }
 
     /**
@@ -283,7 +288,7 @@ public class FIMManager
         if (TextUtils.isEmpty(callbackId))
             return null;
 
-        final CallbackInfo info = MAP_RESULT_CALLBACK.remove(callbackId);
+        final CallbackInfo info = mMapCallbackInfo.remove(callbackId);
         return info == null ? null : info.callback;
     }
 
@@ -295,11 +300,11 @@ public class FIMManager
      */
     public int removeCallbackByTag(String tag)
     {
-        if (TextUtils.isEmpty(tag) || MAP_RESULT_CALLBACK.isEmpty())
+        if (TextUtils.isEmpty(tag) || mMapCallbackInfo.isEmpty())
             return 0;
 
         int count = 0;
-        final Iterator<Map.Entry<String, CallbackInfo>> it = MAP_RESULT_CALLBACK.entrySet().iterator();
+        final Iterator<Map.Entry<String, CallbackInfo>> it = mMapCallbackInfo.entrySet().iterator();
         while (it.hasNext())
         {
             final CallbackInfo info = it.next().getValue();
@@ -326,7 +331,7 @@ public class FIMManager
         final String callbackId = String.valueOf(UUID.randomUUID());
         final CallbackInfo info = new CallbackInfo(callback, callback.getTag());
 
-        MAP_RESULT_CALLBACK.put(callbackId, info);
+        mMapCallbackInfo.put(callbackId, info);
         return callbackId;
     }
 

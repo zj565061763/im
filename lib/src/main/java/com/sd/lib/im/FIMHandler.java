@@ -6,7 +6,7 @@ import com.sd.lib.im.common.SendMsgParam;
 import com.sd.lib.im.msg.FIMMsg;
 import com.sd.lib.im.msg.FIMMsgData;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * IM处理类
@@ -38,7 +38,7 @@ public abstract class FIMHandler<M>
      *
      * @return
      */
-    protected final List<FIMMsgSendCallback> getMsgSendCallback()
+    protected final Collection<FIMMsgSendCallback> getMsgSendCallback()
     {
         return FIMManager.getInstance().getMsgSendCallback();
     }
