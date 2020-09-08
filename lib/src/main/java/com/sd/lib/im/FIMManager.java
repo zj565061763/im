@@ -7,6 +7,7 @@ import com.sd.lib.im.annotation.MsgData;
 import com.sd.lib.im.callback.FIMMsgCallback;
 import com.sd.lib.im.callback.FIMMsgSendCallback;
 import com.sd.lib.im.callback.FIMResultCallback;
+import com.sd.lib.im.callback.FIMSendInterceptor;
 import com.sd.lib.im.common.SendMsgParam;
 import com.sd.lib.im.conversation.FIMConversationType;
 import com.sd.lib.im.msg.FIMMsg;
@@ -49,6 +50,7 @@ public class FIMManager
     private final Map<FIMMsgSendCallback, String> mMsgSendCallbackHolder = new ConcurrentHashMap<>();
 
     private final Map<String, CallbackInfo> mMapCallbackInfo = new ConcurrentHashMap<>();
+    private final Map<FIMSendInterceptor, String> mSendInterceptorHolder = new ConcurrentHashMap<>();
 
     private FIMHandler mIMHandler;
     private boolean mIsDebug;
@@ -199,6 +201,32 @@ public class FIMManager
     }
 
     /**
+     * 添加发送拦截
+     *
+     * @param interceptor
+     */
+    public void addSendInterceptor(FIMSendInterceptor interceptor)
+    {
+        if (interceptor == null)
+            return;
+
+        mSendInterceptorHolder.put(interceptor, "");
+    }
+
+    /**
+     * 移除发送拦截
+     *
+     * @param interceptor
+     */
+    public void removeSendInterceptor(FIMSendInterceptor interceptor)
+    {
+        if (interceptor == null)
+            return;
+
+        mSendInterceptorHolder.remove(interceptor);
+    }
+
+    /**
      * 返回新创建的第三方IM消息接收对象
      *
      * @return
@@ -252,6 +280,12 @@ public class FIMManager
      */
     public FIMMsg sendMsg(SendMsgParam param, FIMMsgData data, FIMResultCallback<FIMMsg> callback)
     {
+        for (FIMSendInterceptor item : mSendInterceptorHolder.keySet())
+        {
+            if (item.interceptMsg(param, data))
+                return null;
+        }
+
         return getIMHandler().sendMsg(param, data, generateCallbackId(callback));
     }
 
