@@ -24,5 +24,5 @@ public interface FIMConversation
      *
      * @return
      */
-    long getUnreadMessageNum();
+    int getUnreadCount();
 }
