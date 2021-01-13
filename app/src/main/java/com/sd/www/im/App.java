@@ -2,9 +2,7 @@ package com.sd.www.im;
 
 import android.app.Application;
 
-/**
- * Created by Administrator on 2017/11/22.
- */
+import com.sd.lib.im.FIMManager;
 
 public class App extends Application
 {
@@ -12,5 +10,6 @@ public class App extends Application
     public void onCreate()
     {
         super.onCreate();
+        FIMManager.getInstance().setDebug(true);
     }
 }

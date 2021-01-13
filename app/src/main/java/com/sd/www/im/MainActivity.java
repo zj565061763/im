@@ -1,39 +1,45 @@
 package com.sd.www.im;
 
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.sd.lib.im.FIMManager;
 import com.sd.lib.im.callback.FIMMsgCallback;
 import com.sd.lib.im.msg.FIMMsg;
 
-public class MainActivity extends AppCompatActivity implements FIMMsgCallback
+public class MainActivity extends AppCompatActivity
 {
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        FIMManager.getInstance().setDebug(true);
-        FIMManager.getInstance().addMsgCallback(this);
+        FIMManager.getInstance().addMsgCallback(mMsgCallback);
     }
 
-    @Override
-    public boolean ignoreMsg(FIMMsg fimMsg)
+    /**
+     * IM消息接收回调
+     */
+    private final FIMMsgCallback mMsgCallback = new FIMMsgCallback()
     {
-        return false;
-    }
+        @Override
+        public boolean ignoreMsg(FIMMsg fimMsg)
+        {
+            return false;
+        }
 
-    @Override
-    public void onReceiveMsg(FIMMsg fimMsg)
-    {
+        @Override
+        public void onReceiveMsg(FIMMsg fimMsg)
+        {
 
-    }
+        }
+    };
 
     @Override
     protected void onDestroy()
     {
         super.onDestroy();
-        FIMManager.getInstance().removeMsgCallback(this);
+        FIMManager.getInstance().removeMsgCallback(mMsgCallback);
     }
 }
