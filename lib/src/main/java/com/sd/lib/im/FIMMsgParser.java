@@ -66,6 +66,9 @@ public abstract class FIMMsgParser<M> implements FIMMsg
             return false;
 
         final int type = getTypeFromJson(json);
+        if (type == FIMMsgData.TYPE_NONE)
+            return false;
+
         final Class clazz = FIMManager.getInstance().getMsgDataClass(type);
         if (clazz == null)
         {
