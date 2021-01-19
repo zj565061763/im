@@ -2,6 +2,7 @@ package com.sd.lib.im.msg;
 
 import com.sd.lib.im.conversation.FIMConversation;
 import com.sd.lib.im.ext.ITimestamp;
+import com.sd.lib.im.model.FIMUserInfo;
 
 /**
  * IM消息
@@ -50,6 +51,13 @@ public interface FIMMsg extends ITimestamp
      * @return
      */
     FIMConversation getConversation();
+
+    /**
+     * 发送者信息
+     *
+     * @return
+     */
+    FIMUserInfo getSender();
 
     /**
      * 移除消息
