@@ -6,8 +6,7 @@ import android.text.TextUtils;
 
 import com.sd.lib.im.msg.FIMMsg;
 import com.sd.lib.im.msg.FIMMsgData;
-
-import org.json.JSONObject;
+import com.sd.lib.im.utils.FIMUtils;
 
 /**
  * 第三方IM消息接收处理类
@@ -62,6 +61,7 @@ public abstract class FIMMsgParser<M> implements FIMMsg
         {
             onError(e);
         }
+
         if (TextUtils.isEmpty(json))
             return false;
 
@@ -98,14 +98,8 @@ public abstract class FIMMsgParser<M> implements FIMMsg
      */
     protected int getTypeFromJson(String json)
     {
-        try
-        {
-            return new JSONObject(json).getInt("type");
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return FIMMsgData.TYPE_NONE;
+        final int type = FIMUtils.getTypeFromJson(json);
+        return type >= 0 ? type : FIMMsgData.TYPE_NONE;
     }
 
     /**
