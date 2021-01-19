@@ -10,7 +10,7 @@ public class FIMUtils
     }
 
     /**
-     * 从json中获取数据类型，字段：type
+     * 获取type字段
      *
      * @param json
      * @return
