@@ -1,11 +1,12 @@
 package com.sd.lib.im.msg;
 
 import com.sd.lib.im.conversation.FIMConversation;
+import com.sd.lib.im.ext.ITimestamp;
 
 /**
  * IM消息
  */
-public interface FIMMsg
+public interface FIMMsg extends ITimestamp
 {
     /**
      * 返回自定义数据对象
@@ -33,6 +34,7 @@ public interface FIMMsg
      *
      * @return
      */
+    @Override
     long getTimestamp();
 
     /**
