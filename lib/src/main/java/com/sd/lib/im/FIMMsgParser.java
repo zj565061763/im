@@ -29,6 +29,12 @@ public abstract class FIMMsgParser<M> implements FIMMsg
     }
 
     @Override
+    public Object getOriginalMsg()
+    {
+        return mSDKMsg;
+    }
+
+    @Override
     public final FIMMsgData getData()
     {
         return mData != null ? mData : FIMMsgData.EMPTY;

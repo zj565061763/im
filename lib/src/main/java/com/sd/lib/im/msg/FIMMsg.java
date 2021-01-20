@@ -10,6 +10,13 @@ import com.sd.lib.im.model.FIMUserInfo;
 public interface FIMMsg extends ITimestamp
 {
     /**
+     * 返回消息的唯一ID
+     *
+     * @return
+     */
+    String getID();
+
+    /**
      * 返回自定义数据对象
      *
      * @return
@@ -70,4 +77,11 @@ public interface FIMMsg extends ITimestamp
      * 把当前消息通知给消息接收回调
      */
     void notifyReceiveMsg();
+
+    /**
+     * 返回原始消息，即第三方SDK消息对象
+     *
+     * @return
+     */
+    Object getOriginalMsg();
 }
